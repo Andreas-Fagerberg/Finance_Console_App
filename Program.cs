@@ -1,12 +1,11 @@
 ﻿namespace FinanceApp_Databaser;
 
-using Npgsql;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        
+        await DatabaseService.InitializeDatabaseSchema();
         Console.WriteLine("FINANCE");      
     }
 }
