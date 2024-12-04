@@ -1,11 +1,14 @@
-﻿namespace FinanceApp_Databaser;
+﻿using Npgsql;
+
+namespace FinanceApp_Databaser;
 
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        await DatabaseService.InitializeDatabaseSchema();
-        Console.WriteLine("FINANCE");      
+        var postgresDatabaseService = new PostgresDatabaseService();
+        NpgsqlConnection connection = await postgresDatabaseService.SetupDatabase();
+         
     }
 }
