@@ -1,20 +1,7 @@
-﻿namespace FinanceApp_Databaser;
+﻿using Npgsql;
 
-using Npgsql;
-// Using interface and abstract class
-public interface IDatabaseService<TConnection> where TConnection : class
-{
-    Task<TConnection> SetupDatabase();
-}
-public abstract class DatabaseService<TConnection> : IDatabaseService<TConnection> where TConnection : class
-{
-    public abstract Task<TConnection> SetupDatabase();
-    protected void LogDatabaseSetup(string databaseType)
-    {
-        Console.WriteLine($"Setting up {databaseType} database at {DateTime.Now}");
-    }
-        
-}
+namespace FinanceApp_Databaser;
+
 public class PostgresDatabaseService : DatabaseService<NpgsqlConnection> {
     
     private static readonly string _connectionString = "Host=localhost;Username=postgres;Password=MhobBhgh606;Database=finance_app";
@@ -22,7 +9,7 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection> {
     {
         using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync(); 
-
+        LogDatabaseSetup("PostgreSQL");
         var createTablesSql = @"
             CREATE TABLE IF NOT EXISTS users (
                 user_id UUID PRIMARY KEY,
@@ -41,6 +28,6 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection> {
         await using var createTableCmd = new NpgsqlCommand(createTablesSql, connection);
         await createTableCmd.ExecuteNonQueryAsync();
         return connection;
+        
     }
 }
-
