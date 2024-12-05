@@ -27,7 +27,6 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection> {
 
         await using var createTableCmd = new NpgsqlCommand(createTablesSql, connection);
         await createTableCmd.ExecuteNonQueryAsync();
-        return connection;
-        
+        return connection;  
     }
 }

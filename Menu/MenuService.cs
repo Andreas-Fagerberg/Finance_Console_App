@@ -1,6 +1,6 @@
 namespace FinanceApp_Databaser;
 
-public class PostgresUserService
+public interface IMenuService 
 {
     
 }

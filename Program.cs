@@ -7,14 +7,9 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        PostgresDatabaseService postgresDatabaseService = 
-        new PostgresDatabaseService();
-
-        // Alternative to above:
-
+        
         DatabaseService<NpgsqlConnection> postgresDatabaseService = 
         new PostgresDatabaseService();
-
         
         NpgsqlConnection connection = 
         await postgresDatabaseService.SetupDatabase();
