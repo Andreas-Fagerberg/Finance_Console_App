@@ -4,13 +4,14 @@ namespace FinanceApp_Databaser;
 
 public class PostgresTransactionService : ITransactionService
 {
-    private IUserService userService;
+    private IUserService? userService;
     private NpgsqlConnection connection;
-    public PostgresTransactionService(IUserService userService, NpgsqlConnection connection)
+
+    public PostgresTransactionService(NpgsqlConnection connection)
     {
-        this.userService = userService;
         this.connection = connection;
     }
+
     public Transaction Load()
     {
         throw new NotImplementedException();

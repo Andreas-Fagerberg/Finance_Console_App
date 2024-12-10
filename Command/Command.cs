@@ -2,12 +2,18 @@
 
 public abstract class Command
 {
-    public ConsoleKey Name { get; init; }
-
+    public ConsoleKey TriggerKey { get; init; }
     protected IUserService userService;
     protected ITransactionService transactionService;
-    public Command (ConsoleKey name, IUserService userService, ITransactionService transactionService, IMenuService menuService)
+    protected IMenuService menuService;
+
+    public Command(ConsoleKey triggerKey, DependencyContainer dependencyContainer)
     {
+        this.TriggerKey = triggerKey;
+        this.userService = dependencyContainer.UserService;
+        this.transactionService = dependencyContainer.TransactionService;
+        this.menuService = dependencyContainer.MenuService;
     }
-    public abstract void Execute(ConsoleKey name);
+
+    public abstract void Execute(ConsoleKey TriggerKey);
 }

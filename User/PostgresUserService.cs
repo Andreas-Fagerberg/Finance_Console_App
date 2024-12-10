@@ -5,10 +5,12 @@ namespace FinanceApp_Databaser;
 public class PostgresUserService : IUserService
 {
     private NpgsqlConnection connection;
+
     public PostgresUserService(NpgsqlConnection connection)
     {
         this.connection = connection;
     }
+
     public User? GetLoggedInUser()
     {
         throw new NotImplementedException();
@@ -28,5 +30,4 @@ public class PostgresUserService : IUserService
     {
         throw new NotImplementedException();
     }
-
 }

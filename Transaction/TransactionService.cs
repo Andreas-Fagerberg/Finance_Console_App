@@ -6,5 +6,4 @@ public interface ITransactionService
 {
     Transaction Load();
     Transaction Save();
-    
 }

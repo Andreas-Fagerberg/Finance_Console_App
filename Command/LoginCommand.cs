@@ -1,8 +1,8 @@
-﻿namespace FinanceApp_Databaser;
+namespace FinanceApp_Databaser;
 
-public class AddTransactionCommand : Command
+public class LoginCommand : Command
 {
-    public AddTransactionCommand(DependencyContainer dependencyContainer)
+    public LoginCommand(DependencyContainer dependencyContainer)
         : base(ConsoleKey.D3, dependencyContainer) { }
 
     public override void Execute(ConsoleKey name)
