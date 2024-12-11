@@ -10,24 +10,21 @@ class Program
 
         NpgsqlConnection connection = await postgresDatabaseService.SetupDatabase();
 
-        DependencyContainer dependencyContainer = new DependencyContainer(
-            userServiceFactory: () => new PostgresUserService(connection),
-            transactionServiceFactory: () => new PostgresTransactionService(connection),
-            menuServiceFactory: () => new AppMenuService()
-        );
-        IMenuService menuService = dependencyContainer.MenuService;
+        DependencyContainer container = new DependencyContainer(connection);
+
+        IMenuService menuService = container.MenuService;
 
         // TODO: Implement TransactionService and PostgresTransactionService
 
         // TODO: Implement MenuService and Create Menus.
         // IMenuService menuService =
         // new SimpleMenuService();
-        Menu startMenu = new LoginMenu(dependencyContainer);
+        Menu startMenu = new LoginMenu(container);
         menuService.SetMenu(startMenu);
 
         while (true)
         {
-            WaitForKey.Any();
+            Utilities.WaitForKeyAny();
             ConsoleKey inputCommand = Console.ReadKey().Key;
 
             menuService.GetMenu().ExecuteCommand(inputCommand);

@@ -1,33 +1,21 @@
 namespace FinanceApp_Databaser;
 
-public interface IDependencyContainer
-{
-    IUserService UserService { get; }
-    ITransactionService TransactionService { get; }
-    IMenuService MenuService { get; }
-}
+using Npgsql;
 
-public class DependencyContainer : IDependencyContainer
+public class DependencyContainer
 {
-    // Lazily initialized services to ensure efficient resource use
-    private Lazy<IUserService> _userService;
-    private Lazy<ITransactionService> _transactionService;
-    private Lazy<IMenuService> _menuService;
+    // Expose services as properties
+    private readonly NpgsqlConnection? _connection;
+    public IUserService UserService { get; }
+    public ITransactionService TransactionService { get; }
+    public IMenuService MenuService { get; }
 
-    public DependencyContainer(
-        Func<IUserService> userServiceFactory,
-        Func<ITransactionService> transactionServiceFactory,
-        Func<IMenuService> menuServiceFactory
-    )
+    public DependencyContainer(NpgsqlConnection connection)
     {
-        // Use lazy initialization to create services only when first accessed
-        _userService = new Lazy<IUserService>(userServiceFactory);
-        _transactionService = new Lazy<ITransactionService>(transactionServiceFactory);
-        _menuService = new Lazy<IMenuService>(menuServiceFactory);
+        // Now services are created internally
+        _connection = connection;
+        UserService = ServiceFactory.CreateUserService(_connection);
+        TransactionService = ServiceFactory.CreateTransactionService(_connection);
+        MenuService = ServiceFactory.CreateMenuService();
     }
-
-    // Implement the dependency container interface
-    public IUserService UserService => _userService.Value;
-    public ITransactionService TransactionService => _transactionService.Value;
-    public IMenuService MenuService => _menuService.Value;
 }
