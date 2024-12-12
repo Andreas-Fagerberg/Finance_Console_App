@@ -2,8 +2,17 @@
 
 public class AddTransactionCommand : Command
 {
-    public AddTransactionCommand(DependencyContainer dependencyContainer)
-        : base(ConsoleKey.D3, dependencyContainer) { }
+    private readonly ITransactionService _transactionService;
+
+    public AddTransactionCommand(
+        ConsoleKey triggerKey,
+        IUserService userService,
+        ITransactionService transactionService
+    )
+        : base(triggerKey, userService)
+    {
+        _transactionService = transactionService;
+    }
 
     public override void Execute(ConsoleKey name)
     {

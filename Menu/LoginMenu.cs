@@ -2,9 +2,9 @@ namespace FinanceApp_Databaser;
 
 public class LoginMenu : Menu
 {
-    public LoginMenu(DependencyContainer dependencyContainer)
+    public LoginMenu(IUserService userService, IMenuService menuService)
     {
-        AddCommand(new LoginCommand(dependencyContainer));
+        AddCommand(new LoginCommand(ConsoleKey.D1, userService, menuService));
     }
 
     public override void Display()

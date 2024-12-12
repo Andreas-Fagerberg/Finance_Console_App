@@ -2,8 +2,13 @@ namespace FinanceApp_Databaser;
 
 public class LoginCommand : Command
 {
-    public LoginCommand(DependencyContainer dependencyContainer)
-        : base(ConsoleKey.D3, dependencyContainer) { }
+    private readonly IMenuService? menuService;
+
+    public LoginCommand(ConsoleKey triggerKey, IUserService userService, IMenuService menuService)
+        : base(triggerKey, userService)
+    {
+        this.menuService = menuService;
+    }
 
     public override void Execute(ConsoleKey name)
     {
@@ -20,6 +25,6 @@ public class LoginCommand : Command
         }
 
         userService.Login(username, password);
-        menuService.SetMenu(new MainMenu());
+        menuService.SetMenu(new MainMenu(menuService, userService, transactionService));
     }
 }

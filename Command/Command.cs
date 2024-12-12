@@ -4,15 +4,11 @@ public abstract class Command
 {
     public ConsoleKey TriggerKey { get; init; }
     protected IUserService userService;
-    protected ITransactionService transactionService;
-    protected IMenuService menuService;
 
-    public Command(ConsoleKey triggerKey, DependencyContainer dependencyContainer)
+    public Command(ConsoleKey triggerKey, IUserService userService)
     {
         this.TriggerKey = triggerKey;
-        this.userService = dependencyContainer.UserService;
-        this.transactionService = dependencyContainer.TransactionService;
-        this.menuService = dependencyContainer.MenuService;
+        this.userService = userService;
     }
 
     public abstract void Execute(ConsoleKey TriggerKey);

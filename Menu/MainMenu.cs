@@ -2,23 +2,20 @@ namespace FinanceApp_Databaser;
 
 public class MainMenu : Menu
 {
-    public MainMenu(DependencyContainer dependencyContainer)
+    public MainMenu(
+        IMenuService menuService,
+        IUserService userService,
+        ITransactionService transactionService
+    )
     {
-        AddCommand(new LoginCommand(dependencyContainer));
+        // Add commands with their specific dependencies
+        AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService));
+        AddCommand(new AddTransactionCommand(ConsoleKey.D2, userService, transactionService));
     }
 
     public override void Display()
     {
-        Console.WriteLine(
-            """
-                    Welcome to Main Menu
-
-                    [1] 
-                    [2]
-                    [3]
-                    [4]
-                    [5]
-            """
-        );
+        Console.WriteLine("Main Menu:");
+        Console.WriteLine("2. Process Transaction");
     }
 }
