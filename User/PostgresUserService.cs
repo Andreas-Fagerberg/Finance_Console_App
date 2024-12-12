@@ -16,9 +16,26 @@ public class PostgresUserService : IUserService
         throw new NotImplementedException();
     }
 
-    public User? Login(string username, string password)
+    public async Task<User?> Login(string username, string password)
     {
-        throw new NotImplementedException();
+        var sql = "SELECT * FROM users WHERE name = @username AND password = @password";
+        using var cmd = new NpgsqlCommand(sql, this.connection);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@password", password);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+
+        if (!reader.Read())
+        {
+            return null;
+        }
+        var user = new User
+        {
+            Id = reader.GetGuid(0),
+            Name = reader.GetString(1),
+            Password = reader.GetString(2),
+        };
+        return user;
     }
 
     public void Logout()

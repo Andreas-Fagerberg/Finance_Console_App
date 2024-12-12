@@ -9,6 +9,10 @@ public class LoginMenu : Menu
 
     public override void Display()
     {
-        // throw new NotImplementedException();
+        Console.WriteLine(
+            """
+                    Welcome to login menu
+            """
+        );
     }
 }

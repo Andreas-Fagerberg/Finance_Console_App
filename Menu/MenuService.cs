@@ -20,4 +20,9 @@ public class AppMenuService : IMenuService
         this.menu = menu;
         this.menu.Display();
     }
+
+    class EmptyMenu : Menu
+    {
+        public override void Display() { }
+    }
 }

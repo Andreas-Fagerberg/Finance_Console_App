@@ -4,6 +4,8 @@ public abstract class Menu
 {
     private List<Command> commands = new List<Command>();
 
+    protected DependencyContainer? dependencyContainer;
+
     public void AddCommand(Command command)
     {
         this.commands.Add(command);

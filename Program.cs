@@ -14,11 +14,6 @@ class Program
 
         IMenuService menuService = container.MenuService;
 
-        // TODO: Implement TransactionService and PostgresTransactionService
-
-        // TODO: Implement MenuService and Create Menus.
-        // IMenuService menuService =
-        // new SimpleMenuService();
         Menu startMenu = new LoginMenu(container);
         menuService.SetMenu(startMenu);
 

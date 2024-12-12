@@ -7,9 +7,13 @@ public class PostgresTransactionService : ITransactionService
     private IUserService? userService;
     private NpgsqlConnection connection;
 
-    public PostgresTransactionService(NpgsqlConnection connection)
+    public PostgresTransactionService(
+        NpgsqlConnection connection,
+        DependencyContainer dependencyContainer
+    )
     {
         this.connection = connection;
+        this.userService = dependencyContainer.UserService;
     }
 
     public Transaction Load()

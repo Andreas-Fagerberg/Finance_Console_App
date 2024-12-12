@@ -1,6 +1,7 @@
 namespace FinanceApp_Databaser;
 
 using Npgsql;
+using Npgsql.Replication;
 
 public class ServiceFactory
 {
@@ -9,9 +10,12 @@ public class ServiceFactory
         return new PostgresUserService(connection);
     }
 
-    public static ITransactionService CreateTransactionService(NpgsqlConnection connection)
+    public static ITransactionService CreateTransactionService(
+        NpgsqlConnection connection,
+        DependencyContainer dependencyContainer
+    )
     {
-        return new PostgresTransactionService(connection);
+        return new PostgresTransactionService(connection, dependencyContainer);
     }
 
     public static IMenuService CreateMenuService()
