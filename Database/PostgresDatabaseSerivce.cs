@@ -7,6 +7,8 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection>
     private static readonly string _connectionString =
         "Host=localhost;Username=postgres;Password=MhobBhgh606;Database=finance_app";
 
+    // Include Error Detail=true;
+
     public override async Task<NpgsqlConnection> SetupDatabase()
     {
         using var connection = new NpgsqlConnection(_connectionString);

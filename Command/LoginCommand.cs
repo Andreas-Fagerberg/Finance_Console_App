@@ -2,12 +2,19 @@ namespace FinanceApp_Databaser;
 
 public class LoginCommand : Command
 {
-    private readonly IMenuService? menuService;
+    private readonly IMenuService menuService;
+    private readonly ITransactionService transactionService;
 
-    public LoginCommand(ConsoleKey triggerKey, IUserService userService, IMenuService menuService)
+    public LoginCommand(
+        ConsoleKey triggerKey,
+        IUserService userService,
+        IMenuService menuService,
+        ITransactionService transactionService
+    )
         : base(triggerKey, userService)
     {
         this.menuService = menuService;
+        this.transactionService = transactionService;
     }
 
     public override void Execute(ConsoleKey name)

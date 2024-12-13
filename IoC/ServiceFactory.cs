@@ -1,7 +1,6 @@
 namespace FinanceApp_Databaser;
 
 using Npgsql;
-using Npgsql.Replication;
 
 public class ServiceFactory
 {

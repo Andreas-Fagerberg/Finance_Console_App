@@ -9,7 +9,7 @@ public class MainMenu : Menu
     )
     {
         // Add commands with their specific dependencies
-        AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService));
+        // AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService));
         AddCommand(new AddTransactionCommand(ConsoleKey.D2, userService, transactionService));
     }
 

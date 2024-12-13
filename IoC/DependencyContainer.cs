@@ -6,9 +6,9 @@ public class DependencyContainer
 {
     // Expose services as properties
     private readonly NpgsqlConnection? _connection;
-    public IUserService UserService { get; }
-    public ITransactionService TransactionService { get; }
-    public IMenuService MenuService { get; }
+    public IUserService UserService { get; init; }
+    public ITransactionService TransactionService { get; init; }
+    public IMenuService MenuService { get; init; }
 
     public DependencyContainer(NpgsqlConnection connection)
     {
