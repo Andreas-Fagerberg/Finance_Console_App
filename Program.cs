@@ -14,7 +14,11 @@ class Program
 
         IMenuService menuService = container.MenuService;
 
-        Menu startMenu = new LoginMenu();
+        Menu startMenu = new LoginMenu(
+            container.UserService,
+            container.MenuService,
+            container.TransactionService
+        );
         menuService.SetMenu(startMenu);
 
         while (true)
