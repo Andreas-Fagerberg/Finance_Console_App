@@ -6,20 +6,14 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        DatabaseService<NpgsqlConnection> postgresDatabaseService = new PostgresDatabaseService();
-
-        NpgsqlConnection connection = await postgresDatabaseService.SetupDatabase();
+        await using var connection = await new PostgresDatabaseService().SetupDatabase();
 
         DependencyContainer container = new DependencyContainer(connection);
 
-        IMenuService menuService = container.MenuService;
+        var startup = new ApplicationStartup(container);
+        startup.Initialize();
 
-        Menu startMenu = new LoginMenu(
-            container.UserService,
-            container.MenuService,
-            container.TransactionService
-        );
-        menuService.SetMenu(startMenu);
+        IMenuService menuService = container.MenuService;
 
         while (true)
         {

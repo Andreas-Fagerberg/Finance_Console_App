@@ -31,7 +31,13 @@ public class LoginCommand : Command
             return;
         }
 
-        userService.Login(username, password);
+        if (userService.Login(username, password) is null)
+        {
+            Console.WriteLine("No user found with those credentials");
+            Utilities.WaitForKeyAny();
+            return;
+        }
+
         menuService.SetMenu(new MainMenu(menuService, userService, transactionService));
     }
 }

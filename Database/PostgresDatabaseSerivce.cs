@@ -23,9 +23,9 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection>
             );
             CREATE TABLE IF NOT EXISTS accounts (
                 account_id UUID PRIMARY KEY,
-                user_id UUID REFERENCES users(user_id)
-                type TEXT CHECK (type IN ('savings account', 'checking accounts')
-            )
+                user_id UUID REFERENCES users(user_id),
+                account_type TEXT CHECK (account_type IN ('savings account', 'checking account'))
+            );
             CREATE TABLE IF NOT EXISTS transactions (
                 transaction_id UUID PRIMARY KEY,
                 user_id UUID REFERENCES users(user_id),
