@@ -15,8 +15,7 @@ public class DependencyContainer
         // Now services are created internally
         _connection = connection;
         UserService = ServiceFactory.CreateUserService(_connection);
-        TransactionService = ServiceFactory.CreateTransactionService(_connection, this); /* 'this' prevents the issue of recursion that occurs if 
-        I write DependencyContainer dependencyContainer */
+        TransactionService = ServiceFactory.CreateTransactionService(_connection, UserService);
         MenuService = ServiceFactory.CreateMenuService();
     }
 }

@@ -19,25 +19,29 @@ public class LoginCommand : Command
 
     public override void Execute(ConsoleKey name)
     {
-        Console.WriteLine("Login");
-        Console.Write("Username: ");
-        string? username = Console.ReadLine();
-        Console.Write("\nPassword: ");
-        string? password = Console.ReadLine();
-
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        while (true)
         {
-            Console.WriteLine("Username and password cannot be empty. Please try again.");
+            Console.WriteLine("Login");
+            Console.Write("Username: ");
+            string? username = Console.ReadLine();
+            Console.Write("\nPassword: ");
+            string? password = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                Console.WriteLine("Username and password cannot be empty. Please try again.");
+                continue;
+            }
+
+            if (userService.Login(username, password) is null)
+            {
+                Console.WriteLine("No user found with those credentials. Please try again.");
+                Utilities.WaitForKeyAny();
+                continue;
+            }
+
+            menuService.SetMenu(new MainMenu(menuService, userService, transactionService));
             return;
         }
-
-        if (userService.Login(username, password) is null)
-        {
-            Console.WriteLine("No user found with those credentials");
-            Utilities.WaitForKeyAny();
-            return;
-        }
-
-        menuService.SetMenu(new MainMenu(menuService, userService, transactionService));
     }
 }

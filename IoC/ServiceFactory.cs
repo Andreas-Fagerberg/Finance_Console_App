@@ -11,10 +11,10 @@ public class ServiceFactory
 
     public static ITransactionService CreateTransactionService(
         NpgsqlConnection connection,
-        DependencyContainer dependencyContainer
+        IUserService userService
     )
     {
-        return new PostgresTransactionService(connection, dependencyContainer);
+        return new PostgresTransactionService(connection, userService);
     }
 
     public static IMenuService CreateMenuService()
