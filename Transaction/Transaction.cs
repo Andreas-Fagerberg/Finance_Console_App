@@ -7,5 +7,5 @@ public class Transaction
     public decimal Amount { get; set; }
     public string? Description { get; set; }
     public DateTime Date { get; set; }
-    public byte Id { get; set; }
+    public int Ref_Id { get; set; }
 }

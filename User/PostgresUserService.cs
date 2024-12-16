@@ -68,11 +68,32 @@ public class PostgresUserService : IUserService
 
     public void Logout()
     {
-        throw new NotImplementedException();
+        loggedInUser = null;
     }
 
     public User RegisterUser(string username, string password)
     {
-        throw new NotImplementedException();
+        User user = new User
+        {
+            UserId = Guid.NewGuid(),
+            Name = username,
+            Password = password,
+        };
+
+        var sql =
+            @"INSERT INTO users (user_id, name, password) VAlUES
+        (
+            @user_id,
+            @name,
+            @password
+        )";
+        using var cmd = new NpgsqlCommand(sql, connection);
+        cmd.Parameters.AddWithValue("@user_id", user.UserId);
+        cmd.Parameters.AddWithValue("@name", user.Name);
+        cmd.Parameters.AddWithValue("@password", user.Password);
+
+        cmd.ExecuteNonQueryAsync();
+
+        return user;
     }
 }

@@ -29,14 +29,23 @@ public class LoginCommand : Command
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                Console.WriteLine("Username and password cannot be empty. Please try again.");
+                Utilities.WaitForKeyAny(
+                    """
+                    Username and password cannot be empty.
+                    Press any key to continue...
+                    """
+                );
                 continue;
             }
 
             if (userService.Login(username, password) is null)
             {
-                Console.WriteLine("No user found with those credentials. Please try again.");
-                Utilities.WaitForKeyAny();
+                Utilities.WaitForKeyAny(
+                    """
+                    No user found with those credentials. 
+                    Press any key to continue...
+                    """
+                );
                 continue;
             }
 

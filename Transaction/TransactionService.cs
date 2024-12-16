@@ -1,6 +1,4 @@
-﻿using Npgsql;
-
-namespace FinanceApp_Databaser;
+﻿namespace FinanceApp_Databaser;
 
 public interface ITransactionService
 {
