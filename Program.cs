@@ -6,8 +6,8 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        await using var connection = await new PostgresDatabaseService().SetupDatabase();
-
+        var databaseService = new PostgresDatabaseService();
+        using var connection = await databaseService.SetupDatabase();
         DependencyContainer container = new DependencyContainer(connection);
 
         var startup = new ApplicationStartup(container);
@@ -17,10 +17,27 @@ class Program
 
         while (true)
         {
-            Utilities.WaitForKeyAny();
+            Console.Clear();
+            menuService.GetMenu().Display();
             ConsoleKey inputCommand = Console.ReadKey().Key;
 
-            menuService.GetMenu().ExecuteCommand(inputCommand);
+            if (inputCommand.Equals(ConsoleKey.Escape))
+            {
+                Utilities.WaitForKeyAny("Thank you for using our finance app!");
+                break;
+            }
+
+            try
+            {
+                menuService.GetMenu().ExecuteCommand(inputCommand);
+            }
+            catch (Exception ex)
+            {
+                string message = string.IsNullOrEmpty(ex.Message)
+                    ? "Something went wrong, please try again."
+                    : ex.Message;
+                Utilities.WaitForKeyAny(message);
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
 namespace FinanceApp_Databaser;
 
-public class LoginCommand : Command
+public class RegisterUserCommand : Command
 {
-    private readonly IMenuService menuService;
-    private readonly ITransactionService transactionService;
+    private readonly IMenuService _menuService;
+    private readonly ITransactionService _transactionService;
 
-    public LoginCommand(
+    public RegisterUserCommand(
         ConsoleKey triggerKey,
         IUserService userService,
         IMenuService menuService,
@@ -13,8 +13,8 @@ public class LoginCommand : Command
     )
         : base(triggerKey, userService)
     {
-        this.menuService = menuService;
-        this.transactionService = transactionService;
+        _menuService = menuService;
+        _transactionService = transactionService;
     }
 
     public override async void Execute()
@@ -22,7 +22,7 @@ public class LoginCommand : Command
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("| LOGIN |\n");
+            Console.WriteLine("| REGISTER |\n");
             Console.Write("Username: ");
             string? username = Console.ReadLine();
             Console.Write("\nPassword: ");
@@ -33,16 +33,13 @@ public class LoginCommand : Command
                 Utilities.WaitForKeyAny("Username or password input cannot be empty.");
                 continue;
             }
-
-            User? user = await userService.Login(username, password);
-            if (user is null)
+            if (await userService.CheckUserExists(username))
             {
-                Utilities.WaitForKeyAny("No user found with those credentials.");
-                continue;
+                Utilities.WaitForKeyAny("A user with that name already exists");
             }
+            string loggedInUser = await userService.RegisterUser(username, password);
 
-            menuService.SetMenu(new MainMenu(menuService, userService, transactionService));
-            return;
+            Utilities.WaitForKeyAny("The user: " + loggedInUser + " was created successfully.");
         }
     }
 }

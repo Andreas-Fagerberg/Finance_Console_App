@@ -11,16 +11,19 @@ public abstract class Menu
 
     public void ExecuteCommand(ConsoleKey inputCommand)
     {
-        if (inputCommand.Equals(ConsoleKey.D5)) { }
-        foreach (Command command in commands)
+        try
         {
-            if (command.TriggerKey.Equals(inputCommand))
+            if (inputCommand.Equals(ConsoleKey.D5)) { }
+            foreach (Command command in commands)
             {
-                command.Execute(inputCommand);
-                return;
+                if (command.TriggerKey.Equals(inputCommand))
+                {
+                    command.Execute();
+                    return;
+                }
             }
         }
-
+        catch { }
         throw new ArgumentException("Command not found.");
     }
 

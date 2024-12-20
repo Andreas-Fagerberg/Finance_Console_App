@@ -11,5 +11,5 @@ public abstract class Command
         this.userService = userService;
     }
 
-    public abstract void Execute(ConsoleKey TriggerKey);
+    public abstract void Execute();
 }

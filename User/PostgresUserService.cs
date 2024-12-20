@@ -71,7 +71,7 @@ public class PostgresUserService : IUserService
         loggedInUser = null;
     }
 
-    public User RegisterUser(string username, string password)
+    public async Task<string> RegisterUser(string username, string password)
     {
         User user = new User
         {
@@ -92,8 +92,26 @@ public class PostgresUserService : IUserService
         cmd.Parameters.AddWithValue("@name", user.Name);
         cmd.Parameters.AddWithValue("@password", user.Password);
 
-        cmd.ExecuteNonQueryAsync();
+        await cmd.ExecuteNonQueryAsync();
 
-        return user;
+        loggedInUser = user.UserId;
+        return user.Name;
+    }
+
+    public async Task<bool> CheckUserExists(string username)
+    {
+        var sql = @"SELECT * FROM users WHERE name = @name";
+        using var cmd = new NpgsqlCommand(sql, connection);
+
+        cmd.Parameters.AddWithValue("@name", username);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        // Om ingen användare matchade - returnera null
+        if (!reader.Read())
+        {
+            return false;
+        }
+
+        return true;
     }
 }
