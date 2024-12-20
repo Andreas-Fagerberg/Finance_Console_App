@@ -27,7 +27,7 @@ public class LogoutCommand : Command
             {
                 case ConsoleKey.D1:
                     _menuService.SetMenu(
-                        new LoginMenu(userService, _menuService, _transactionService)
+                        new InitialMenu(userService, _menuService, _transactionService)
                     );
                     break;
                 case ConsoleKey.D2:

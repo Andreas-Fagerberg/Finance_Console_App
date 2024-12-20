@@ -25,13 +25,21 @@ public class AddTransactionCommand : Command
             if (user == null)
             {
                 await Utilities.WaitForKeyAny("No user detected, returning to login menu");
-                _menuService.SetMenu(new LoginMenu(userService, _menuService, _transactionService));
+                _menuService.SetMenu(
+                    new InitialMenu(userService, _menuService, _transactionService)
+                );
                 return;
             }
 
             SubMenu.Display(SubMenuType.AddTransaction);
+            ConsoleKey input = Console.ReadKey().Key;
+            if (input.Equals(ConsoleKey.D2))
+            {
+                return;
+            }
             Transaction transaction = new Transaction { UserId = user.UserId };
 
+            Console.WriteLine("| ADD TRANSACTION |");
             Console.Write("Enter a description: ");
             string? description = Console.ReadLine();
             if (string.IsNullOrEmpty(description))
@@ -51,11 +59,13 @@ public class AddTransactionCommand : Command
             transaction.Amount = amount;
             try
             {
-                _transactionService.Save(transaction);
+                await _transactionService.Save(transaction);
             }
-            catch
+            catch (Exception ex)
             {
-                await Utilities.WaitForKeyAny("An error occured while saving the transaction");
+                await Utilities.WaitForKeyAny(
+                    "An error occured while saving the transaction" + ex.Message
+                );
                 continue;
             }
         }

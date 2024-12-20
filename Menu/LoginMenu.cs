@@ -1,8 +1,8 @@
 namespace FinanceApp_Databaser;
 
-public class LoginMenu : Menu
+public class InitialMenu : Menu
 {
-    public LoginMenu(
+    public InitialMenu(
         IUserService userService,
         IMenuService menuService,
         ITransactionService transactionService

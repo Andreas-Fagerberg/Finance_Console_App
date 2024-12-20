@@ -12,7 +12,7 @@ public class ApplicationStartup
     public void Initialize()
     {
         // Create initial menu with all necessary dependencies
-        var initialMenu = new LoginMenu(
+        var initialMenu = new InitialMenu(
             _container.UserService,
             _container.MenuService,
             _container.TransactionService

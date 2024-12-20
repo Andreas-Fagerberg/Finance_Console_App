@@ -63,6 +63,7 @@ public class PostgresUserService : IUserService
             Name = reader.GetString(1),
             Password = reader.GetString(2),
         };
+        loggedInUser = user.UserId;
         return user;
     }
 

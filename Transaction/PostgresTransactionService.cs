@@ -4,7 +4,7 @@ namespace FinanceApp_Databaser;
 
 public class PostgresTransactionService : ITransactionService
 {
-    private IUserService? userService;
+    private IUserService userService;
     private NpgsqlConnection connection;
 
     public PostgresTransactionService(NpgsqlConnection connection, IUserService userService)
@@ -13,20 +13,28 @@ public class PostgresTransactionService : ITransactionService
         this.userService = userService;
     }
 
-    public async Task<List<Transaction>?> Load(string dateType, string dateFilter)
+    public async Task<List<Transaction>?> Load(string date, string sql)
     {
-        List<Transaction> transactions = new List<Transaction>();
-
-        var sql =
-            @"
-        SELECT * FROM transactions 
-        WHERE users.user_id = @user_Id
-        AND EXTRACT(YEAR = @dateType FROM transaction_date) = @dateFilter
-        ORDER BY t.creation_date DESC";
+        List<Transaction>? transactions = new List<Transaction>();
+        User? user = await userService.GetLoggedInUser();
+        if (user == null)
+        {
+            return null;
+        }
 
         using var cmd = new NpgsqlCommand(sql, connection);
-        cmd.Parameters.AddWithValue("@dateType", dateType);
-        cmd.Parameters.AddWithValue("@dateFilter", dateFilter);
+        cmd.Parameters.AddWithValue("@user_id", user.UserId);
+        if (int.TryParse(date, out var filterValue))
+        {
+            cmd.Parameters.AddWithValue("@date", filterValue); // Assuming the dateFilter is an integer
+        }
+        else
+        {
+            // Handle invalid dateFilter or throw an exception
+            throw new ArgumentException("Invalid dateFilter value");
+        }
+        // Handle invalid dateFilter or throw an exception
+
 
         using var reader = await cmd.ExecuteReaderAsync();
 
@@ -52,7 +60,7 @@ public class PostgresTransactionService : ITransactionService
         return transactions;
     }
 
-    public async void Save(Transaction transaction)
+    public async Task Save(Transaction transaction)
     {
         /* Since the insertion is for all columns there is no need to type out
         all columns but for clarity they will be written out. */
