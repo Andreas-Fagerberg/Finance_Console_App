@@ -20,6 +20,8 @@ public class PostgresTransactionService : ITransactionService
 
     public Transaction Save()
     {
-        throw new NotImplementedException();
+        // Since the insertion is for all columns there is no need to type out 
+        // all columns but for clarity they will be written out. 
+        var sql = @"INSERT INTO transactions (transaction_id, user_id, description)"
     }
 }

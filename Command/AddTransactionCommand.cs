@@ -14,8 +14,5 @@ public class AddTransactionCommand : Command
         _transactionService = transactionService;
     }
 
-    public override void Execute(ConsoleKey name)
-    {
-        throw new NotImplementedException();
-    }
+    public override void Execute(ConsoleKey name) { }
 }
