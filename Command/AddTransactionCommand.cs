@@ -29,6 +29,7 @@ public class AddTransactionCommand : Command
                 return;
             }
 
+            SubMenu.Display(SubMenuType.AddTransaction);
             Transaction transaction = new Transaction { UserId = user.UserId };
 
             Console.Write("Enter a description: ");

@@ -12,7 +12,7 @@ public class MainMenu : Menu
         // csharpier-ignore-start
         AddCommand(new AddTransactionCommand(ConsoleKey.D1, userService, transactionService, menuService));
         AddCommand(new CheckBalanceCommand(ConsoleKey.D3, userService, transactionService));
-        AddCommand(new DisplayTransactionCommand(ConsoleKey.D4, userService, transactionService, menuService));
+        AddCommand(new DisplayTransactionCommand(ConsoleKey.D4, userService, menuService, transactionService));
         AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService, transactionService));
         // csharpier-ignore-end
     }

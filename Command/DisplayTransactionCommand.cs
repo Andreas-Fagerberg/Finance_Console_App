@@ -1,15 +1,23 @@
-﻿
-
-namespace FinanceApp_Databaser;
+﻿namespace FinanceApp_Databaser;
 
 public class DisplayTransactionCommand : Command
 {
-    public DisplayTransactionCommand(ConsoleKey triggerKey, IUserService userService, ITransactionService transactionService, IMenuService menuService) : base(triggerKey, userService)
+    private readonly IMenuService _menuService;
+    private readonly ITransactionService _transactionService;
+
+    public DisplayTransactionCommand(
+        ConsoleKey triggerKey,
+        IUserService userService,
+        IMenuService menuService,
+        ITransactionService transactionService
+    )
+        : base(triggerKey, userService)
     {
-        men
+        _menuService = menuService;
+        _transactionService = transactionService;
     }
 
-    public override Task Execute()
+    public override async Task Execute()
     {
         throw new NotImplementedException();
     }

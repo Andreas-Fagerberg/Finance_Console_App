@@ -8,10 +8,10 @@ public class LoginMenu : Menu
         ITransactionService transactionService
     )
     {
-        AddCommand(
-            new RegisterUserCommand(ConsoleKey.D1, userService, menuService, transactionService)
-        );
+        // csharpier-ignore-start
+        AddCommand(new RegisterUserCommand(ConsoleKey.D1, userService, menuService, transactionService));
         AddCommand(new LoginCommand(ConsoleKey.D2, userService, menuService, transactionService));
+        // csharpier-ignore-end
     }
 
     public override void Display()

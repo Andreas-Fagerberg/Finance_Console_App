@@ -32,7 +32,7 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection>
                     user_id UUID REFERENCES users(user_id),
                     description TEXT,
                     amount DECIMAL,
-                    transaction_date TIMESTAMP WITH TIME ZONE
+                    transfer_date TIMESTAMP WITH TIME ZONE
                 )";
 
             // Create and execute the command

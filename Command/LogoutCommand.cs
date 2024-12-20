@@ -21,16 +21,7 @@ public class LogoutCommand : Command
     {
         while (true)
         {
-            Console.WriteLine(
-                """
-                Are you sure would like to log out?
-
-                [1] - Log out.
-                [2] - Back.
-
-                """
-            );
-
+            SubMenu.Display(SubMenuType.LogOut);
             ConsoleKeyInfo input = Console.ReadKey();
             switch (input.Key)
             {
@@ -40,7 +31,6 @@ public class LogoutCommand : Command
                     );
                     break;
                 case ConsoleKey.D2:
-
                     return;
                 default:
                     await Utilities.WaitForKeyAny("Please enter a valid option");

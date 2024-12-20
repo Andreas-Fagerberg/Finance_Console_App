@@ -21,8 +21,15 @@ public class RegisterUserCommand : Command
     {
         while (true)
         {
+            SubMenu.Display(SubMenuType.RegisterUser);
+            ConsoleKey input = Console.ReadKey(true).Key;
+            if (input.Equals(ConsoleKey.D2))
+            {
+                return;
+            }
             Console.Clear();
-            Console.WriteLine("| REGISTER |\n");
+            Console.WriteLine("| REGISTER USER |\n");
+
             Console.Write("Username: ");
             string? username = Console.ReadLine();
             Console.Write("\nPassword: ");
