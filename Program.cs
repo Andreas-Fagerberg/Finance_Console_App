@@ -23,20 +23,20 @@ class Program
 
             if (inputCommand.Equals(ConsoleKey.Escape))
             {
-                Utilities.WaitForKeyAny("Thank you for using our finance app!");
+                await Utilities.WaitForKeyAny("Thank you for using our finance app!");
                 break;
             }
 
             try
             {
-                menuService.GetMenu().ExecuteCommand(inputCommand);
+                await menuService.GetMenu().ExecuteCommand(inputCommand);
             }
             catch (Exception ex)
             {
                 string message = string.IsNullOrEmpty(ex.Message)
                     ? "Something went wrong, please try again."
                     : ex.Message;
-                Utilities.WaitForKeyAny(message);
+                await Utilities.WaitForKeyAny(message);
             }
         }
     }

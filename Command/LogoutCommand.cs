@@ -17,7 +17,7 @@ public class LogoutCommand : Command
         _transactionService = transactionService;
     }
 
-    public override void Execute()
+    public override async Task Execute()
     {
         while (true)
         {
@@ -43,7 +43,7 @@ public class LogoutCommand : Command
 
                     return;
                 default:
-                    Utilities.WaitForKeyAny("Please enter a valid option");
+                    await Utilities.WaitForKeyAny("Please enter a valid option");
                     break;
             }
         }

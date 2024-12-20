@@ -17,7 +17,7 @@ public class LoginCommand : Command
         this.transactionService = transactionService;
     }
 
-    public override async void Execute()
+    public override async Task Execute()
     {
         while (true)
         {
@@ -30,14 +30,14 @@ public class LoginCommand : Command
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                Utilities.WaitForKeyAny("Username or password input cannot be empty.");
+                await Utilities.WaitForKeyAny("Username or password input cannot be empty.");
                 continue;
             }
 
             User? user = await userService.Login(username, password);
             if (user is null)
             {
-                Utilities.WaitForKeyAny("No user found with those credentials.");
+                await Utilities.WaitForKeyAny("No user found with those credentials.");
                 continue;
             }
 

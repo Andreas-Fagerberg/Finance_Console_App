@@ -17,14 +17,14 @@ public class AddTransactionCommand : Command
         _menuService = menuService;
     }
 
-    public override async void Execute()
+    public override async Task Execute()
     {
         User? user = await userService.GetLoggedInUser();
         while (true)
         {
             if (user == null)
             {
-                Utilities.WaitForKeyAny("No user detected, returning to login menu");
+                await Utilities.WaitForKeyAny("No user detected, returning to login menu");
                 _menuService.SetMenu(new LoginMenu(userService, _menuService, _transactionService));
                 return;
             }
@@ -35,7 +35,7 @@ public class AddTransactionCommand : Command
             string? description = Console.ReadLine();
             if (string.IsNullOrEmpty(description))
             {
-                Utilities.WaitForKeyAny("Please enter a description for your transaction.");
+                await Utilities.WaitForKeyAny("Please enter a description for your transaction.");
                 continue;
             }
             transaction.Description = description;
@@ -44,7 +44,7 @@ public class AddTransactionCommand : Command
             decimal amount;
             if (!decimal.TryParse(Console.ReadLine(), out amount))
             {
-                Utilities.WaitForKeyAny("Please enter an amount for your transaction");
+                await Utilities.WaitForKeyAny("Please enter an amount for your transaction");
                 continue;
             }
             transaction.Amount = amount;
@@ -54,7 +54,7 @@ public class AddTransactionCommand : Command
             }
             catch
             {
-                Utilities.WaitForKeyAny("An error occured while saving the transaction");
+                await Utilities.WaitForKeyAny("An error occured while saving the transaction");
                 continue;
             }
         }

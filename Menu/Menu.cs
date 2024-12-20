@@ -9,22 +9,18 @@ public abstract class Menu
         this.commands.Add(command);
     }
 
-    public void ExecuteCommand(ConsoleKey inputCommand)
+    public async Task ExecuteCommand(ConsoleKey inputCommand)
     {
-        try
+        if (inputCommand.Equals(ConsoleKey.D5)) { }
+        foreach (Command command in commands)
         {
-            if (inputCommand.Equals(ConsoleKey.D5)) { }
-            foreach (Command command in commands)
+            if (command.TriggerKey.Equals(inputCommand))
             {
-                if (command.TriggerKey.Equals(inputCommand))
-                {
-                    command.Execute();
-                    return;
-                }
+                await command.Execute();
+                return;
             }
         }
-        catch { }
-        throw new ArgumentException("Command not found.");
+        throw new Exception("Command not found.");
     }
 
     public abstract void Display();

@@ -9,12 +9,12 @@ public class MainMenu : Menu
     )
     {
         // Add commands with their specific dependencies
-        // AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService));
-        AddCommand(
-            new AddTransactionCommand(ConsoleKey.D2, userService, transactionService, menuService)
-        );
+        // csharpier-ignore-start
+        AddCommand(new AddTransactionCommand(ConsoleKey.D1, userService, transactionService, menuService));
         AddCommand(new CheckBalanceCommand(ConsoleKey.D3, userService, transactionService));
+        AddCommand(new DisplayTransactionCommand(ConsoleKey.D4, userService, transactionService, menuService));
         AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService, transactionService));
+        // csharpier-ignore-end
     }
 
     public override void Display()

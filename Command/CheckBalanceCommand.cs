@@ -16,21 +16,23 @@ public class CheckBalanceCommand : Command
         _transactionService = transactionService;
     }
 
-    public override async void Execute()
+    public override async Task Execute()
     {
         User? user = await userService.GetLoggedInUser();
         if (user == null)
         {
-            Utilities.WaitForKeyAny("No user detected, please login before checking balance.");
+            await Utilities.WaitForKeyAny(
+                "No user detected, please login before checking balance."
+            );
             return;
         }
 
         decimal? balance = await _transactionService.GetBalance(user);
         if (balance == null)
         {
-            Utilities.WaitForKeyAny("Current balance: 0");
+            await Utilities.WaitForKeyAny("Current balance: 0");
             return;
         }
-        Utilities.WaitForKeyAny("Current balance: " + balance);
+        await Utilities.WaitForKeyAny("Current balance: " + balance);
     }
 }

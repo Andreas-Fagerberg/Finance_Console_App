@@ -17,7 +17,7 @@ public class RegisterUserCommand : Command
         _transactionService = transactionService;
     }
 
-    public override async void Execute()
+    public override async Task Execute()
     {
         while (true)
         {
@@ -30,16 +30,26 @@ public class RegisterUserCommand : Command
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                Utilities.WaitForKeyAny("Username or password input cannot be empty.");
+                await Utilities.WaitForKeyAny("Username or password input cannot be empty.");
                 continue;
             }
-            if (await userService.CheckUserExists(username))
-            {
-                Utilities.WaitForKeyAny("A user with that name already exists");
-            }
-            string loggedInUser = await userService.RegisterUser(username, password);
 
-            Utilities.WaitForKeyAny("The user: " + loggedInUser + " was created successfully.");
+            bool userExists = await userService.CheckUserExists(username);
+
+            if (userExists)
+            {
+                await Utilities.WaitForKeyAny("A user with that name already exists");
+                continue;
+            }
+            else
+            {
+                string loggedInUser = await userService.RegisterUser(username, password);
+
+                await Utilities.WaitForKeyAny(
+                    "The user: " + loggedInUser + " was created successfully."
+                );
+                return;
+            }
         }
     }
 }
