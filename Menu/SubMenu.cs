@@ -49,6 +49,18 @@ public class SubMenu
                     """
                 );
                 break;
+            case SubMenuType.DELETETRANSACTION:
+                Console.Write(
+                    """
+                    | DELETE TRANSACTION |
+
+                    [1] - Delete a transaction
+                    [2] - Return to the main menu.
+
+                    Command: 
+                    """
+                );
+                break;
 
             case SubMenuType.REGISTERUSER:
                 Console.Write(

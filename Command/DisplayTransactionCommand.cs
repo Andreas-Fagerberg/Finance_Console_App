@@ -29,16 +29,21 @@ public class DisplayTransactionCommand : Command
 
         while (running)
         {
-            SubMenu.Display(SubMenuType.DISPLAYTRANSACTION1);
-            ConsoleKey input = Console.ReadKey().Key;
-            switch (input)
+            ConsoleKey input;
+            // Helps keep track of if user is removing a transaction and displays submenu only if false.
+            if (!DeleteTransactionCommand.removing)
             {
-                case ConsoleKey.D1:
-                    break;
-                case ConsoleKey.D2:
-                    return;
-                default:
-                    continue;
+                SubMenu.Display(SubMenuType.DISPLAYTRANSACTION1);
+                input = Console.ReadKey().Key;
+                switch (input)
+                {
+                    case ConsoleKey.D1:
+                        break;
+                    case ConsoleKey.D2:
+                        return;
+                    default:
+                        continue;
+                }
             }
 
             Console.Clear();
@@ -114,6 +119,11 @@ public class DisplayTransactionCommand : Command
         {
             Console.WriteLine(transaction.StringConversion());
         }
-        Console.ReadKey();
+
+        // Waits for user input here only if not removing transactions.
+        if (!DeleteTransactionCommand.removing)
+        {
+            Utilities.WaitForKeyAny();
+        }
     }
 }

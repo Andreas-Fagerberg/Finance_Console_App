@@ -2,8 +2,8 @@ namespace FinanceApp_Databaser;
 
 public class LoginCommand : Command
 {
-    private readonly IMenuService menuService;
-    private readonly ITransactionService transactionService;
+    private readonly IMenuService _menuService;
+    private readonly ITransactionService _transactionService;
 
     public LoginCommand(
         ConsoleKey triggerKey,
@@ -13,8 +13,8 @@ public class LoginCommand : Command
     )
         : base(triggerKey, userService)
     {
-        this.menuService = menuService;
-        this.transactionService = transactionService;
+        _menuService = menuService;
+        _transactionService = transactionService;
     }
 
     public override async Task Execute()
@@ -47,7 +47,7 @@ public class LoginCommand : Command
                 continue;
             }
 
-            menuService.SetMenu(new MainMenu(menuService, userService, transactionService));
+            _menuService.SetMenu(new MainMenu(_menuService, userService, _transactionService));
             return;
         }
     }
