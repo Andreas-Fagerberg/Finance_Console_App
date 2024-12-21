@@ -6,6 +6,7 @@ public class PostgresTransactionService : ITransactionService
 {
     private IUserService userService;
     private NpgsqlConnection connection;
+    private List<Transaction>? transactions = new List<Transaction>();
 
     public PostgresTransactionService(NpgsqlConnection connection, IUserService userService)
     {
@@ -15,13 +16,14 @@ public class PostgresTransactionService : ITransactionService
 
     public async Task<List<Transaction>?> Load(DateType dateType, List<string> inputDate)
     {
+        transactions = new List<Transaction>();
         User? user = await userService.GetLoggedInUser();
+
         if (user == null)
         {
             return null;
         }
 
-        List<Transaction>? transactions = new List<Transaction>();
         string sql = string.Empty;
 
         switch (dateType)
@@ -49,6 +51,7 @@ public class PostgresTransactionService : ITransactionService
         }
 
         using var cmd = new NpgsqlCommand(sql, connection);
+
         // inputDate index: '0' = year/date   | '1' = month/week
         switch (dateType)
         {
@@ -83,39 +86,37 @@ public class PostgresTransactionService : ITransactionService
                 break;
         }
 
-        using var reader = await cmd.ExecuteReaderAsync();
-
-        while (reader.Read())
+        try
         {
-            Transaction transaction = new Transaction
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (reader.Read())
             {
-                TransactionId = reader.GetGuid(0),
-                UserId = reader.GetGuid(1),
-                Description = reader.GetString(2),
-                Amount = reader.GetDecimal(3),
-                Date = reader.GetDateTime(4),
-                RefId = transactions.Count + 1,
-            };
-            transactions.Add(transaction);
+                Transaction transaction = new Transaction
+                {
+                    TransactionId = reader.GetGuid(0),
+                    UserId = reader.GetGuid(1),
+                    Description = reader.GetString(2),
+                    Amount = reader.GetDecimal(3),
+                    Date = reader.GetDateTime(4),
+                    RefId = transactions.Count + 1,
+                };
+                transactions.Add(transaction);
+            }
+            List<Transaction>? tempTransactions = transactions.ToList();
+            return transactions;
         }
-        return transactions;
+        catch
+        {
+            Utilities.WaitForKeyAny(
+                "An error occurred while loading the transactions. Please try again later."
+            );
+        }
+        return null;
     }
 
     public async Task Save(Transaction transaction)
     {
-        /* Since the insertion is for all columns there is no need to type out
-        all columns but for clarity they will be written out. */
-        var sql =
-            @"INSERT INTO transactions (transaction_id, user_id, amount, description, transfer_date)
-        VALUES
-        (
-            @transaction_id,
-            @user_id,
-            @amount,
-            @description,
-            @transfer_date
-        )
-        ";
+        string sql = SqlQueries.InsertTransaction;
 
         using var cmd = new NpgsqlCommand(sql, connection);
         cmd.Parameters.AddWithValue("@transaction_id", transaction.TransactionId);
@@ -124,28 +125,71 @@ public class PostgresTransactionService : ITransactionService
         cmd.Parameters.AddWithValue("@amount", transaction.Amount);
         cmd.Parameters.AddWithValue("@transfer_date", DateTime.Now);
 
-        await cmd.ExecuteNonQueryAsync();
+        try
+        {
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            Utilities.WaitForKeyAny(
+                "An error occurred while saving the transaction. Please try again later."
+            );
+        }
         return;
+    }
+
+    public async Task<bool> Delete(Transaction transaction)
+    {
+        string sql = SqlQueries.DeleteTransactionByUuid;
+
+        using var cmd = new NpgsqlCommand(sql, connection);
+        cmd.Parameters.AddWithValue("@user_id", transaction.UserId);
+        cmd.Parameters.AddWithValue("@transaction_id", transaction.TransactionId);
+
+        try
+        {
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            Utilities.WaitForKeyAny(
+                "An error occurred while deleting the transaction. Please try again later."
+            );
+            return false;
+        }
+        return true;
     }
 
     public async Task<decimal?> GetBalance(User user)
     {
-        var sql =
-            @"SELECT SUM(amount) FROM transactions 
-          INNER JOIN users ON transactions.user_id = users.user_id
-          WHERE users.user_id = @user_id";
+        string sql = SqlQueries.GetBalanceByUserId;
 
         using var cmd = new NpgsqlCommand(sql, connection);
         cmd.Parameters.AddWithValue("@user_id", user.UserId);
 
-        using var reader = await cmd.ExecuteReaderAsync();
-
-        if (!reader.Read() || reader.IsDBNull(0))
+        try
         {
-            return null;
-        }
+            using var reader = await cmd.ExecuteReaderAsync();
 
-        decimal balance = reader.GetDecimal(0);
-        return balance;
+            if (!reader.Read() || reader.IsDBNull(0))
+            {
+                return null;
+            }
+
+            decimal balance = reader.GetDecimal(0);
+            return balance;
+        }
+        catch
+        {
+            Utilities.WaitForKeyAny(
+                "An error occurred while gettin the current balance. Please try again later."
+            );
+        }
+        return null;
+    }
+
+    public Task<List<Transaction>?> GetCurrentTransactions()
+    {
+        return Task.FromResult(transactions);
     }
 }

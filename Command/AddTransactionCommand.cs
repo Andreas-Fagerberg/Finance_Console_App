@@ -22,6 +22,7 @@ public class AddTransactionCommand : Command
             Utilities.WaitForKeyAny("No user detected, please log in before checking balance.");
             return;
         }
+        Transaction transaction = new Transaction { UserId = user.UserId };
         while (true)
         {
             SubMenu.Display(SubMenuType.ADDTRANSACTION);
@@ -35,30 +36,39 @@ public class AddTransactionCommand : Command
                 default:
                     continue;
             }
-            Transaction transaction = new Transaction { UserId = user.UserId };
 
             Console.Clear();
             Console.WriteLine("| ADD TRANSACTION |\n");
-            Console.Write("Enter a description: ");
-            string? description = Console.ReadLine();
-            if (string.IsNullOrEmpty(description))
-            {
-                Utilities.WaitForKeyAny("Please enter a description for your transaction.");
-                continue;
-            }
-            transaction.Description = description;
+            string? description = InputHelper.GetDescription();
 
-            Console.Write("\nEnter an amount: ");
-            decimal amount;
-            if (!decimal.TryParse(Console.ReadLine(), out amount))
+            if (string.IsNullOrWhiteSpace(description) || description.Length > 35)
             {
-                Utilities.WaitForKeyAny("Please enter an amount for your transaction");
+                Utilities.WaitForKeyAny(
+                    "Description must be between 1-35 characters long, please try again."
+                );
                 continue;
             }
+
+            string? tempAmount = InputHelper.GetAmount();
+
+            if (
+                string.IsNullOrWhiteSpace(tempAmount)
+                || tempAmount.Length > 20
+                || !decimal.TryParse(tempAmount, out decimal amount)
+            )
+            {
+                Utilities.WaitForKeyAny(
+                    "Amount must be between 1-20 characters long and only consist of an integer or decimal"
+                );
+                continue;
+            }
+
+            transaction.Description = description;
             transaction.Amount = amount;
             try
             {
                 await _transactionService.Save(transaction);
+                Utilities.WaitForKeyAny("Transaction successfully saved");
             }
             catch (Exception ex)
             {

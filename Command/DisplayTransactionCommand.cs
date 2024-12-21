@@ -30,7 +30,7 @@ public class DisplayTransactionCommand : Command
         while (running)
         {
             ConsoleKey input;
-            // Helps keep track of if user is removing a transaction and displays submenu only if false.
+            // Displays the submenu here only if not removing transactions.
             if (!DeleteTransactionCommand.removing)
             {
                 SubMenu.Display(SubMenuType.DISPLAYTRANSACTION1);

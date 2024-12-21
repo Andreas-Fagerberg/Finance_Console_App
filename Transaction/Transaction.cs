@@ -25,7 +25,7 @@ public class Transaction
                 + new string((char)32, 4 - RefId.ToString().Length)
                 + "|  "
                 + Description
-                + new string((char)32, 30 - Description.Length)
+                + new string((char)32, 35 - Description.Length)
                 + "|  "
                 + Amount
                 + new string((char)32, 20 - Amount.ToString().Length)
@@ -40,7 +40,9 @@ public class Transaction
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.Clear();
         Console.WriteLine("Matched transactions \n");
-        Console.WriteLine(" ID:  | Description:                   | Amount:              |Date: ");
+        Console.WriteLine(
+            " ID:  | Description:                        | Amount:              |Date: "
+        );
         Console.ForegroundColor = ConsoleColor.White;
     }
 }

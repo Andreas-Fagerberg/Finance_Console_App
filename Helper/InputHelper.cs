@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Text;
 
 namespace FinanceApp_Databaser;
@@ -41,14 +40,14 @@ public static class InputHelper
 
     public static string GetDescription()
     {
-        Console.Write("Username: ");
-        string? username = Console.ReadLine();
-        return username ?? string.Empty;
+        Console.Write("Enter a description: ");
+        string? description = Console.ReadLine();
+        return description ?? string.Empty;
     }
 
     public static string GetAmount()
     {
-        Console.Write("Username: ");
+        Console.Write("\nEnter an amount: ");
         string? username = Console.ReadLine();
         return username ?? string.Empty;
     }

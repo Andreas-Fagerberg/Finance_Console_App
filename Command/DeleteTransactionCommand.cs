@@ -36,7 +36,39 @@ public class DeleteTransactionCommand : Command
             }
 
             await _menuService.GetMenu().ExecuteCommand(ConsoleKey.D4);
-            Console.WriteLine("Hello!");
+            Console.Write("Please enter the ID of the transaction you wish to remove: ");
+            string? id = Console.ReadLine();
+            if (!ValidationHelper.ValidateNotEmpty(id, "ID cannot be empty or whitespace."))
+            {
+                continue;
+            }
+            if (!int.TryParse(id, out int parsedId))
+            {
+                Utilities.WaitForKeyAny("Please enter only numbers.");
+                continue;
+            }
+
+            List<Transaction>? transactions = await _transactionService.GetCurrentTransactions();
+
+            if (transactions == null)
+            {
+                continue;
+            }
+
+            foreach (Transaction transaction in transactions)
+            {
+                if (transaction.RefId.Equals(parsedId))
+                {
+                    if (!await _transactionService.Delete(transaction))
+                    {
+                        Utilities.WaitForKeyAny("Failed to delete the transaction.");
+                        return;
+                    }
+                    Utilities.WaitForKeyAny("Successfully deleted the transaction.");
+                }
+            }
+
+            Utilities.WaitForKeyAny("Hello!");
             break;
         }
         removing = false;

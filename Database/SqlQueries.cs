@@ -47,4 +47,23 @@ public static class SqlQueries
         SELECT * FROM transactions 
         WHERE user_id = @user_id 
         AND EXTRACT(DOW FROM transfer_date) = @DayOfWeek"; // DOW returns 0 for Sunday, 1 for Monday, etc.
+
+    public static string DeleteTransactionByUuid =>
+        @"DELETE FROM transactions WHERE user_id = @user_id AND transaction_id = @transaction_id";
+
+    public static string InsertTransaction =>
+        @"INSERT INTO transactions (transaction_id, user_id, amount, description, transfer_date)
+        VALUES
+        (
+            @transaction_id,
+            @user_id,
+            @amount,
+            @description,
+            @transfer_date
+        )
+        ";
+    public static string GetBalanceByUserId =>
+        @"SELECT SUM(amount) FROM transactions 
+          INNER JOIN users ON transactions.user_id = users.user_id
+          WHERE users.user_id = @user_id";
 }
