@@ -1,4 +1,6 @@
-﻿namespace FinanceApp_Databaser;
+﻿using System.Runtime.CompilerServices;
+
+namespace FinanceApp_Databaser;
 
 public class DisplayTransactionCommand : Command
 {
@@ -19,6 +21,12 @@ public class DisplayTransactionCommand : Command
 
     public override async Task Execute()
     {
+        User? user = await userService.GetLoggedInUser();
+        if (user == null)
+        {
+            Utilities.WaitForKeyAny("No user detected, please log in before checking balance.");
+            return;
+        }
         DateType dateType = DateType.NONE;
         List<string> dateInput = new List<string>();
 
@@ -26,7 +34,21 @@ public class DisplayTransactionCommand : Command
 
         while (running)
         {
+            SubMenu.Display(SubMenuType.DISPLAYTRANSACTION1);
             ConsoleKey input = Console.ReadKey().Key;
+            switch (input)
+            {
+                case ConsoleKey.D1:
+                    break;
+                case ConsoleKey.D2:
+                    return;
+                default:
+                    continue;
+            }
+
+            Console.Clear();
+            SubMenu.Display(SubMenuType.DISPLAYTRANSACTION2);
+            input = Console.ReadKey().Key;
             switch (input)
             {
                 case ConsoleKey.D1:
@@ -59,20 +81,24 @@ public class DisplayTransactionCommand : Command
         {
             case DateType.YEAR:
                 dateInput.Add(InputHelper.GetYear());
+                Utilities.WaitForKeyAny("Year was selected.");
                 break;
             case DateType.MONTH:
                 dateInput.Add(InputHelper.GetYear());
                 dateInput.Add(InputHelper.GetMonth());
+                Utilities.WaitForKeyAny("Month was selected.");
                 break;
             case DateType.WEEK:
                 dateInput.Add(InputHelper.GetYear());
                 dateInput.Add(InputHelper.GetWeek());
+                Utilities.WaitForKeyAny("Week was selected.");
                 break;
             case DateType.DATE:
                 dateInput.Add(InputHelper.GetDate());
+                Utilities.WaitForKeyAny("Date was selected.");
                 break;
             case DateType.NONE:
-                Utilities.WaitForKeyAny("No date type selected.");
+                Utilities.WaitForKeyAny("All was selected.");
                 break;
             default:
                 Utilities.WaitForKeyAny("Unknown date type.");
@@ -86,6 +112,9 @@ public class DisplayTransactionCommand : Command
             _menuService.SetMenu(new InitialMenu(userService, _menuService, _transactionService));
             return;
         }
+
+        Console.WriteLine();
+        Transaction.PrintHeader();
         if (transactions.Count < 1)
         {
             Utilities.WaitForKeyAny("No transactions found.");
@@ -94,8 +123,7 @@ public class DisplayTransactionCommand : Command
 
         foreach (Transaction transaction in transactions)
         {
-            Console.WriteLine(transaction.Description);
-            Console.WriteLine(transaction.RefId);
+            Console.WriteLine(transaction.StringConversion());
         }
         Console.ReadKey();
     }

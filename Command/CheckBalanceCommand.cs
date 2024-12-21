@@ -19,7 +19,7 @@ public class CheckBalanceCommand : Command
         User? user = await userService.GetLoggedInUser();
         if (user == null)
         {
-            Utilities.WaitForKeyAny("No user detected, please login before checking balance.");
+            Utilities.WaitForKeyAny("No user detected, please log in before checking balance.");
             return;
         }
 

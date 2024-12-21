@@ -2,20 +2,8 @@ namespace FinanceApp_Databaser;
 
 public class RegisterUserCommand : Command
 {
-    private readonly IMenuService _menuService;
-    private readonly ITransactionService _transactionService;
-
-    public RegisterUserCommand(
-        ConsoleKey triggerKey,
-        IUserService userService,
-        IMenuService menuService,
-        ITransactionService transactionService
-    )
-        : base(triggerKey, userService)
-    {
-        _menuService = menuService;
-        _transactionService = transactionService;
-    }
+    public RegisterUserCommand(ConsoleKey triggerKey, IUserService userService)
+        : base(triggerKey, userService) { }
 
     public override async Task Execute()
     {

@@ -36,7 +36,7 @@ public class PostgresTransactionService : ITransactionService
                 break;
             case DateType.WEEK:
                 // Requires parameters: @user_id, @year and @week
-                sql = SqlQueries.GetTransactionsByUserIdAndDayOfWeek;
+                sql = SqlQueries.GetTransactionsByUserIdAndWeek;
                 break;
             case DateType.DATE:
                 // Requires parameters: @user_id and @date
@@ -54,36 +54,31 @@ public class PostgresTransactionService : ITransactionService
         {
             case DateType.YEAR:
                 // Requires parameters: @user_id and @year
-                sql = SqlQueries.GetTransactionsByUserIdAndYear;
                 cmd.Parameters.AddWithValue("@user_id", user.UserId);
                 cmd.Parameters.AddWithValue("@year", int.Parse(inputDate[0]));
                 break;
             case DateType.MONTH:
                 // Requires parameters: @user_id, @year and @month
-                sql = SqlQueries.GetTransactionsByUserIdAndMonth;
                 cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                cmd.Parameters.AddWithValue("@year", int.Parse(inputDate[0]));
                 cmd.Parameters.AddWithValue("@month", int.Parse(inputDate[1]));
                 break;
             case DateType.WEEK:
                 // Requires parameters: @user_id, @year and @week
-                sql = SqlQueries.GetTransactionsByUserIdAndDayOfWeek;
                 cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                cmd.Parameters.AddWithValue("@year", int.Parse(inputDate[0]));
                 cmd.Parameters.AddWithValue("@week", int.Parse(inputDate[1]));
                 break;
             case DateType.DATE:
                 // Requires parameters: @user_id and @date
-                sql = SqlQueries.GetTransactionsByUserIdAndDate;
-
                 cmd.Parameters.AddWithValue("@user_id", user.UserId);
                 cmd.Parameters.AddWithValue(
                     "@date",
                     DateTime.ParseExact(inputDate[1], "yyyy-MM-dd", null)
                 );
-
                 break;
             case DateType.NONE:
                 // Requires parameters: @user_id
-                sql = SqlQueries.GetTransactionsByUserId;
                 cmd.Parameters.AddWithValue("@user_id", user.UserId);
                 break;
         }

@@ -3,39 +3,37 @@
 public class AddTransactionCommand : Command
 {
     private readonly ITransactionService _transactionService;
-    private readonly IMenuService _menuService;
 
     public AddTransactionCommand(
         ConsoleKey triggerKey,
         IUserService userService,
-        ITransactionService transactionService,
-        IMenuService menuService
+        ITransactionService transactionService
     )
         : base(triggerKey, userService)
     {
         _transactionService = transactionService;
-        _menuService = menuService;
     }
 
     public override async Task Execute()
     {
         User? user = await userService.GetLoggedInUser();
+        if (user == null)
+        {
+            Utilities.WaitForKeyAny("No user detected, please log in before checking balance.");
+            return;
+        }
         while (true)
         {
-            if (user == null)
-            {
-                Utilities.WaitForKeyAny("No user detected, returning to login menu");
-                _menuService.SetMenu(
-                    new InitialMenu(userService, _menuService, _transactionService)
-                );
-                return;
-            }
-
             SubMenu.Display(SubMenuType.ADDTRANSACTION);
             ConsoleKey input = Console.ReadKey().Key;
-            if (input.Equals(ConsoleKey.D2))
+            switch (input)
             {
-                return;
+                case ConsoleKey.D1:
+                    break;
+                case ConsoleKey.D2:
+                    return;
+                default:
+                    continue;
             }
             Transaction transaction = new Transaction { UserId = user.UserId };
 

@@ -19,6 +19,36 @@ public class SubMenu
                     """
                 );
                 break;
+            case SubMenuType.DISPLAYTRANSACTION1:
+                Console.Write(
+                    """
+                    | DISPLAY TRANSACTIONS |
+
+                    [1] - Display transactions
+                    [2] - Return to the main menu.
+
+                    Command: 
+                    """
+                );
+                break;
+
+            case SubMenuType.DISPLAYTRANSACTION2:
+                Console.Write(
+                    """
+                    | DISPLAY TRANSACTIONS - FILTER BY |
+
+                    Please choose an option to filter the transactions by:
+
+                    [1] - Year
+                    [2] - Month
+                    [3] - Week
+                    [4] - Specific date
+                    [5] - All
+
+                    Command: 
+                    """
+                );
+                break;
 
             case SubMenuType.REGISTERUSER:
                 Console.Write(
