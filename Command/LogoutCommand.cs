@@ -21,7 +21,7 @@ public class LogoutCommand : Command
     {
         while (true)
         {
-            SubMenu.Display(SubMenuType.LogOut);
+            SubMenu.Display(SubMenuType.LOGOUT);
             ConsoleKeyInfo input = Console.ReadKey();
             switch (input.Key)
             {

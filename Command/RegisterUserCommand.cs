@@ -21,7 +21,7 @@ public class RegisterUserCommand : Command
     {
         while (true)
         {
-            SubMenu.Display(SubMenuType.RegisterUser);
+            SubMenu.Display(SubMenuType.REGISTERUSER);
             ConsoleKey input = Console.ReadKey(true).Key;
             if (input.Equals(ConsoleKey.D2))
             {

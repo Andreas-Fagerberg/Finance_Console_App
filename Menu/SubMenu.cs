@@ -47,10 +47,3 @@ public class SubMenu
         }
     }
 }
-
-public enum SubMenuType
-{
-    AddTransaction,
-    RegisterUser,
-    LogOut,
-}

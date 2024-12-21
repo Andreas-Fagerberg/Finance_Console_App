@@ -13,13 +13,39 @@ public class PostgresTransactionService : ITransactionService
         this.userService = userService;
     }
 
-    public async Task<List<Transaction>?> Load(string date, string sql)
+    public async Task<List<Transaction>?> Load(DateType dateType, string date)
     {
-        List<Transaction>? transactions = new List<Transaction>();
         User? user = await userService.GetLoggedInUser();
         if (user == null)
         {
             return null;
+        }
+
+        List<Transaction>? transactions = new List<Transaction>();
+        string sql;
+
+        switch (dateType)
+        {
+            case DateType.YEAR:
+                // Requires parameters: @user_id and @year
+                sql = SqlQueries.GetTransactionsByUserIdAndYear;
+                break;
+            case DateType.MONTH:
+                // Requires parameters: @user_id, @year and @month
+                sql = SqlQueries.GetTransactionsByUserIdAndMonth;
+                break;
+            case DateType.WEEK:
+                // Requires parameters: @user_id, @year and @week
+                sql = SqlQueries.GetTransactionsByUserIdAndDayOfWeek;
+                break;
+            case DateType.DATE:
+                // Requires parameters: @user_id and @date
+                sql = SqlQueries.GetTransactionsByUserIdAndDate;
+                break;
+            case DateType.NONE:
+                // Requires parameters: @user_id
+                sql = SqlQueries.GetTransactionsByUserId;
+                break;
         }
 
         using var cmd = new NpgsqlCommand(sql, connection);

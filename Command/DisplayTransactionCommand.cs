@@ -21,45 +21,47 @@ public class DisplayTransactionCommand : Command
 
     public override async Task Execute()
     {
-        string dateType = string.Empty;
+        DateType dateType = DateType.NONE;
 
         bool running = true;
+
         while (running)
         {
             ConsoleKey input = Console.ReadKey().Key;
             switch (input)
             {
                 case ConsoleKey.D1:
-                    dateType = "YEAR";
+                    dateType = DateType.YEAR;
                     running = false;
                     break;
                 case ConsoleKey.D2:
-                    dateType = "MONTH";
+                    dateType = DateType.MONTH;
                     running = false;
                     break;
                 case ConsoleKey.D3:
-                    dateType = "WEEK";
+                    dateType = DateType.WEEK;
                     running = false;
                     break;
                 case ConsoleKey.D4:
-                    dateType = "DATE";
+                    dateType = DateType.DATE;
                     running = false;
                     break;
+                case ConsoleKey.D5:
+                    dateType = DateType.NONE;
+                    break;
                 default:
+                    await Utilities.WaitForKeyAny("Invalid input, please try again.");
                     continue;
             }
         }
-        string? dateFilter = Console.ReadLine();
-        if (string.IsNullOrEmpty(dateFilter))
-        {
-            return;
-        }
 
-        List<Transaction>? transactions = await _transactionService.Load(dateType, dateFilter, sql);
+        List<Transaction>? transactions = await _transactionService.Load(dateType, date);
         if (transactions == null)
         {
             await Utilities.WaitForKeyAny("No user detected.");
-            _menuService.SetMenu(new InitialMenu(userService, _menuService, _transactionService));
+            _menuService.SetMenu(
+                new InitialMenu(userService, _menuService, _transactionService)
+            );
             return;
         }
         foreach (Transaction transaction in transactions)
@@ -67,5 +69,6 @@ public class DisplayTransactionCommand : Command
             Console.WriteLine(transaction);
         }
         Console.ReadKey();
+        }
     }
 }

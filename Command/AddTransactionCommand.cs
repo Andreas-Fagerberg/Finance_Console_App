@@ -31,7 +31,7 @@ public class AddTransactionCommand : Command
                 return;
             }
 
-            SubMenu.Display(SubMenuType.AddTransaction);
+            SubMenu.Display(SubMenuType.ADDTRANSACTION);
             ConsoleKey input = Console.ReadKey().Key;
             if (input.Equals(ConsoleKey.D2))
             {

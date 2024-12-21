@@ -29,7 +29,7 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection>
        
                 CREATE TABLE IF NOT EXISTS transactions (
                     transaction_id UUID PRIMARY KEY,
-                    user_id UUID REFERENCES users(user_id),
+                    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
                     description TEXT,
                     amount DECIMAL,
                     transfer_date TIMESTAMP WITH TIME ZONE
