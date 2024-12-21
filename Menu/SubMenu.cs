@@ -7,7 +7,7 @@ public class SubMenu
         Console.Clear();
         switch (choice)
         {
-            case SubMenuType.AddTransaction:
+            case SubMenuType.ADDTRANSACTION:
                 Console.Write(
                     """
                     | ADD TRANSACTION |
@@ -20,7 +20,7 @@ public class SubMenu
                 );
                 break;
 
-            case SubMenuType.RegisterUser:
+            case SubMenuType.REGISTERUSER:
                 Console.Write(
                     """
                     | REGISTER USER |
@@ -32,7 +32,7 @@ public class SubMenu
                     """
                 );
                 break;
-            case SubMenuType.LogOut:
+            case SubMenuType.LOGOUT:
                 Console.Write(
                     """
                     Are you sure would like to log out?

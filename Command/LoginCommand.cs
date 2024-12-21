@@ -30,14 +30,14 @@ public class LoginCommand : Command
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                await Utilities.WaitForKeyAny("Username or password input cannot be empty.");
+                Utilities.WaitForKeyAny("Username or password input cannot be empty.");
                 continue;
             }
 
             User? user = await userService.Login(username, password);
             if (user is null)
             {
-                await Utilities.WaitForKeyAny("No user found with those credentials.");
+                Utilities.WaitForKeyAny("No user found with those credentials.");
                 continue;
             }
 

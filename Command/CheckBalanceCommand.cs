@@ -21,18 +21,16 @@ public class CheckBalanceCommand : Command
         User? user = await userService.GetLoggedInUser();
         if (user == null)
         {
-            await Utilities.WaitForKeyAny(
-                "No user detected, please login before checking balance."
-            );
+            Utilities.WaitForKeyAny("No user detected, please login before checking balance.");
             return;
         }
 
         decimal? balance = await _transactionService.GetBalance(user);
         if (balance == null)
         {
-            await Utilities.WaitForKeyAny("Current balance: 0");
+            Utilities.WaitForKeyAny("Current balance: 0");
             return;
         }
-        await Utilities.WaitForKeyAny("Current balance: " + balance);
+        Utilities.WaitForKeyAny("Current balance: " + balance);
     }
 }

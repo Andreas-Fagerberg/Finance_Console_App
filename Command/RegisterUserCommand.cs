@@ -30,31 +30,33 @@ public class RegisterUserCommand : Command
             Console.Clear();
             Console.WriteLine("| REGISTER USER |\n");
 
-            Console.Write("Username: ");
-            string? username = Console.ReadLine();
-            Console.Write("\nPassword: ");
-            string? password = Console.ReadLine();
+            string username = InputHelper.GetUsername();
+            string password = InputHelper.GetPassword();
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (
+                !await ValidationHelper.ValidateNotEmpty(
+                    username,
+                    "Username cannot be empty or whitespace."
+                )
+                || !await ValidationHelper.ValidateNotEmpty(
+                    password,
+                    "Password cannot be empty or whitespace."
+                )
+            )
             {
-                await Utilities.WaitForKeyAny("Username or password input cannot be empty.");
-                continue;
+                continue; // Skip the current iteration and prompt the user again
             }
 
-            bool userExists = await userService.CheckUserExists(username);
-
-            if (userExists)
+            if (await userService.CheckUserExists(username))
             {
-                await Utilities.WaitForKeyAny("A user with that name already exists");
+                Utilities.WaitForKeyAny("A user with that name already exists");
                 continue;
             }
             else
             {
                 string loggedInUser = await userService.RegisterUser(username, password);
 
-                await Utilities.WaitForKeyAny(
-                    "The user: " + loggedInUser + " was created successfully."
-                );
+                Utilities.WaitForKeyAny("The user: " + loggedInUser + " was created successfully.");
                 return;
             }
         }

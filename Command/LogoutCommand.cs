@@ -17,7 +17,7 @@ public class LogoutCommand : Command
         _transactionService = transactionService;
     }
 
-    public override async Task Execute()
+    public override Task Execute()
     {
         while (true)
         {
@@ -29,11 +29,13 @@ public class LogoutCommand : Command
                     _menuService.SetMenu(
                         new InitialMenu(userService, _menuService, _transactionService)
                     );
-                    break;
+                    return Task.CompletedTask;
+
                 case ConsoleKey.D2:
-                    return;
+                    return Task.CompletedTask;
+
                 default:
-                    await Utilities.WaitForKeyAny("Please enter a valid option");
+                    Utilities.WaitForKeyAny("Please enter a valid option");
                     break;
             }
         }

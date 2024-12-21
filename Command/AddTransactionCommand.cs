@@ -24,7 +24,7 @@ public class AddTransactionCommand : Command
         {
             if (user == null)
             {
-                await Utilities.WaitForKeyAny("No user detected, returning to login menu");
+                Utilities.WaitForKeyAny("No user detected, returning to login menu");
                 _menuService.SetMenu(
                     new InitialMenu(userService, _menuService, _transactionService)
                 );
@@ -44,7 +44,7 @@ public class AddTransactionCommand : Command
             string? description = Console.ReadLine();
             if (string.IsNullOrEmpty(description))
             {
-                await Utilities.WaitForKeyAny("Please enter a description for your transaction.");
+                Utilities.WaitForKeyAny("Please enter a description for your transaction.");
                 continue;
             }
             transaction.Description = description;
@@ -53,7 +53,7 @@ public class AddTransactionCommand : Command
             decimal amount;
             if (!decimal.TryParse(Console.ReadLine(), out amount))
             {
-                await Utilities.WaitForKeyAny("Please enter an amount for your transaction");
+                Utilities.WaitForKeyAny("Please enter an amount for your transaction");
                 continue;
             }
             transaction.Amount = amount;
@@ -63,7 +63,7 @@ public class AddTransactionCommand : Command
             }
             catch (Exception ex)
             {
-                await Utilities.WaitForKeyAny(
+                Utilities.WaitForKeyAny(
                     "An error occured while saving the transaction" + ex.Message
                 );
                 continue;

@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-
-namespace FinanceApp_Databaser;
+﻿namespace FinanceApp_Databaser;
 
 public class DisplayTransactionCommand : Command
 {
@@ -50,7 +48,7 @@ public class DisplayTransactionCommand : Command
                     dateType = DateType.NONE;
                     break;
                 default:
-                    await Utilities.WaitForKeyAny("Invalid input, please try again.");
+                    Utilities.WaitForKeyAny("Invalid input, please try again.");
                     continue;
             }
         }
@@ -58,10 +56,8 @@ public class DisplayTransactionCommand : Command
         List<Transaction>? transactions = await _transactionService.Load(dateType, date);
         if (transactions == null)
         {
-            await Utilities.WaitForKeyAny("No user detected.");
-            _menuService.SetMenu(
-                new InitialMenu(userService, _menuService, _transactionService)
-            );
+            Utilities.WaitForKeyAny("No user detected.");
+            _menuService.SetMenu(new InitialMenu(userService, _menuService, _transactionService));
             return;
         }
         foreach (Transaction transaction in transactions)
@@ -69,6 +65,5 @@ public class DisplayTransactionCommand : Command
             Console.WriteLine(transaction);
         }
         Console.ReadKey();
-        }
     }
 }

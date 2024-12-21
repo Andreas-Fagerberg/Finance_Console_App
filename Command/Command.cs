@@ -11,5 +11,13 @@ public abstract class Command
         this.userService = userService;
     }
 
-    public abstract Task Execute();
+    // Default to async Task (but will be overridden in sync commands)
+    /*
+    Sync commands need to return Task.CompletedTask with this method.
+    But allows for using the same interface for all commands.
+    */
+    public virtual Task Execute()
+    {
+        return Task.CompletedTask;
+    }
 }
