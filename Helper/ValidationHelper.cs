@@ -13,7 +13,7 @@ public static class ValidationHelper
     }
 
     /// <summary>
-    /// Checks if input is empty and returns a bool
+    /// Checks if input is empty and returns false if input is empty.
     /// </summary>
     /// <param name="input"></param>
     /// <param name="errorMessage"></param>
