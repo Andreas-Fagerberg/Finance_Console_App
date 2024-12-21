@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace FinanceApp_Databaser;
@@ -38,10 +39,25 @@ public static class InputHelper
         return password.ToString();
     }
 
+    public static string GetDescription()
+    {
+        Console.Write("Username: ");
+        string? username = Console.ReadLine();
+        return username ?? string.Empty;
+    }
+
+    public static string GetAmount()
+    {
+        Console.Write("Username: ");
+        string? username = Console.ReadLine();
+        return username ?? string.Empty;
+    }
+
     public static string GetYear()
     {
         while (true)
         {
+            Console.Clear();
             Console.Write("\nEnter a year (YYYY): ");
             if (
                 !int.TryParse(Console.ReadLine(), out int year)
@@ -63,6 +79,7 @@ public static class InputHelper
     {
         while (true)
         {
+            Console.Clear();
             Console.Write("\nEnter month (1-12): ");
             if (!int.TryParse(Console.ReadLine(), out int month) || month < 1 || month > 12)
             {
@@ -78,6 +95,7 @@ public static class InputHelper
     {
         while (true)
         {
+            Console.Clear();
             Console.Write("\nEnter week number (1-53): ");
             if (!int.TryParse(Console.ReadLine(), out int week) || week < 1 | week > 53)
             {
@@ -95,6 +113,7 @@ public static class InputHelper
     {
         while (true)
         {
+            Console.Clear();
             Console.Write("\nEnter date (YYYY-MM-DD): ");
             if (
                 !DateTime.TryParseExact(

@@ -74,7 +74,7 @@ public class PostgresTransactionService : ITransactionService
                 cmd.Parameters.AddWithValue("@user_id", user.UserId);
                 cmd.Parameters.AddWithValue(
                     "@date",
-                    DateTime.ParseExact(inputDate[1], "yyyy-MM-dd", null)
+                    DateTime.ParseExact(inputDate[0], "yyyy-MM-dd", null)
                 );
                 break;
             case DateType.NONE:

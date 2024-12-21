@@ -37,7 +37,8 @@ public class AddTransactionCommand : Command
             }
             Transaction transaction = new Transaction { UserId = user.UserId };
 
-            Console.WriteLine("| ADD TRANSACTION |");
+            Console.Clear();
+            Console.WriteLine("| ADD TRANSACTION |\n");
             Console.Write("Enter a description: ");
             string? description = Console.ReadLine();
             if (string.IsNullOrEmpty(description))
