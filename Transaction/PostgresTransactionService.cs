@@ -13,7 +13,7 @@ public class PostgresTransactionService : ITransactionService
         this.userService = userService;
     }
 
-    public async Task<List<Transaction>?> Load(DateType dateType, string date)
+    public async Task<List<Transaction>?> Load(DateType dateType, List<string> inputDate)
     {
         User? user = await userService.GetLoggedInUser();
         if (user == null)
@@ -22,7 +22,7 @@ public class PostgresTransactionService : ITransactionService
         }
 
         List<Transaction>? transactions = new List<Transaction>();
-        string sql;
+        string sql = string.Empty;
 
         switch (dateType)
         {
@@ -49,27 +49,47 @@ public class PostgresTransactionService : ITransactionService
         }
 
         using var cmd = new NpgsqlCommand(sql, connection);
-        cmd.Parameters.AddWithValue("@user_id", user.UserId);
-        if (int.TryParse(date, out var filterValue))
+        // inputDate index: '0' = year/date   | '1' = month/week
+        switch (dateType)
         {
-            cmd.Parameters.AddWithValue("@date", filterValue); // Assuming the dateFilter is an integer
-        }
-        else
-        {
-            // Handle invalid dateFilter or throw an exception
-            throw new ArgumentException("Invalid dateFilter value");
-        }
-        // Handle invalid dateFilter or throw an exception
+            case DateType.YEAR:
+                // Requires parameters: @user_id and @year
+                sql = SqlQueries.GetTransactionsByUserIdAndYear;
+                cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                cmd.Parameters.AddWithValue("@year", int.Parse(inputDate[0]));
+                break;
+            case DateType.MONTH:
+                // Requires parameters: @user_id, @year and @month
+                sql = SqlQueries.GetTransactionsByUserIdAndMonth;
+                cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                cmd.Parameters.AddWithValue("@month", int.Parse(inputDate[1]));
+                break;
+            case DateType.WEEK:
+                // Requires parameters: @user_id, @year and @week
+                sql = SqlQueries.GetTransactionsByUserIdAndDayOfWeek;
+                cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                cmd.Parameters.AddWithValue("@week", int.Parse(inputDate[1]));
+                break;
+            case DateType.DATE:
+                // Requires parameters: @user_id and @date
+                sql = SqlQueries.GetTransactionsByUserIdAndDate;
 
+                cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                cmd.Parameters.AddWithValue(
+                    "@date",
+                    DateTime.ParseExact(inputDate[1], "yyyy-MM-dd", null)
+                );
+
+                break;
+            case DateType.NONE:
+                // Requires parameters: @user_id
+                sql = SqlQueries.GetTransactionsByUserId;
+                cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                break;
+        }
 
         using var reader = await cmd.ExecuteReaderAsync();
 
-        if (!reader.Read())
-        {
-            return null;
-        }
-
-        int refId = 1;
         while (reader.Read())
         {
             Transaction transaction = new Transaction
@@ -79,9 +99,9 @@ public class PostgresTransactionService : ITransactionService
                 Description = reader.GetString(2),
                 Amount = reader.GetDecimal(3),
                 Date = reader.GetDateTime(4),
-                RefId = refId,
+                RefId = transactions.Count + 1,
             };
-            refId++;
+            transactions.Add(transaction);
         }
         return transactions;
     }

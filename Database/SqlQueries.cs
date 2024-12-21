@@ -5,30 +5,30 @@ public static class SqlQueries
         @"
         SELECT * FROM transactions 
         WHERE user_id = @user_id 
-        AND EXTRACT(YEAR FROM transfer_date) = @Year";
+        AND EXTRACT(YEAR FROM transfer_date) = @year";
 
     // Query for transactions by user ID and Month
     public static string GetTransactionsByUserIdAndMonth =>
         @"
         SELECT * FROM transactions 
         WHERE user_id = @user_id 
-        AND EXTRACT(YEAR FROM transfer_date) = @Year 
-        AND EXTRACT(MONTH FROM transfer_date) = @Month";
+        AND EXTRACT(YEAR FROM transfer_date) = @year 
+        AND EXTRACT(MONTH FROM transfer_date) = @month";
 
     // Query for transactions by user ID and Week of the year
     public static string GetTransactionsByUserIdAndWeek =>
         @"
         SELECT * FROM transactions 
         WHERE user_id = @user_id 
-        AND EXTRACT(YEAR FROM transfer_date) = @Year 
-        AND EXTRACT(WEEK FROM transfer_date) = @Week";
+        AND EXTRACT(YEAR FROM transfer_date) = @year 
+        AND EXTRACT(WEEK FROM transfer_date) = @week";
 
     // Query for transactions by user ID and specific date
     public static string GetTransactionsByUserIdAndDate =>
         @"
         SELECT * FROM transactions 
         WHERE user_id = @user_id 
-        AND transfer_date = @Date";
+        AND transfer_date = @date";
 
     // Query for transactions by user ID within a date range (Start Date to End Date)
     public static string GetTransactionsByUserIdAndDateRange =>

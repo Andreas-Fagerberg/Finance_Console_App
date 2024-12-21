@@ -2,7 +2,7 @@
 
 public interface ITransactionService
 {
-    Task<List<Transaction>?> Load(DateType dateType, string date);
+    Task<List<Transaction>?> Load(DateType dateType, List<string> dateInput);
     Task Save(Transaction transaction);
     Task<decimal?> GetBalance(User user);
 }

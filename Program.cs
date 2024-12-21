@@ -23,7 +23,7 @@ class Program
 
             if (inputCommand.Equals(ConsoleKey.Escape))
             {
-                await Utilities.WaitForKeyAny("Thank you for using our finance app!");
+                Utilities.WaitForKeyAny("Thank you for using our finance app!");
                 break;
             }
 
@@ -36,7 +36,7 @@ class Program
                 string message = string.IsNullOrEmpty(ex.Message)
                     ? "Something went wrong, please try again."
                     : ex.Message;
-                await Utilities.WaitForKeyAny(message);
+                Utilities.WaitForKeyAny(message);
             }
         }
     }

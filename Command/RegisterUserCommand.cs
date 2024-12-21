@@ -34,11 +34,11 @@ public class RegisterUserCommand : Command
             string password = InputHelper.GetPassword();
 
             if (
-                !await ValidationHelper.ValidateNotEmpty(
+                !ValidationHelper.ValidateNotEmpty(
                     username,
                     "Username cannot be empty or whitespace."
                 )
-                || !await ValidationHelper.ValidateNotEmpty(
+                || !ValidationHelper.ValidateNotEmpty(
                     password,
                     "Password cannot be empty or whitespace."
                 )

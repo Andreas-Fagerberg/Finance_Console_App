@@ -74,7 +74,7 @@ public static class InputHelper
         }
     }
 
-    public static string GetWeekNumber()
+    public static string GetWeek()
     {
         while (true)
         {
