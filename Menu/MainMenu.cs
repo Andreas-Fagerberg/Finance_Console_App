@@ -11,8 +11,9 @@ public class MainMenu : Menu
         // Add commands with their specific dependencies
         // csharpier-ignore-start
         AddCommand(new AddTransactionCommand(ConsoleKey.D1, userService, transactionService));
+        AddCommand(new DeleteTransactionCommand(ConsoleKey.D2, userService, transactionService));
         AddCommand(new CheckBalanceCommand(ConsoleKey.D3, userService, transactionService));
-        AddCommand(new DisplayTransactionCommand(ConsoleKey.D4, userService, menuService, transactionService));
+        AddCommand(new DisplayTransactionCommand(ConsoleKey.D4, userService, transactionService));
         AddCommand(new LogoutCommand(ConsoleKey.D5, userService, menuService, transactionService));
         // csharpier-ignore-end
     }

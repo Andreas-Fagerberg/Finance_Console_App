@@ -1,21 +1,16 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace FinanceApp_Databaser;
+﻿namespace FinanceApp_Databaser;
 
 public class DisplayTransactionCommand : Command
 {
-    private readonly IMenuService _menuService;
     private readonly ITransactionService _transactionService;
 
     public DisplayTransactionCommand(
         ConsoleKey triggerKey,
         IUserService userService,
-        IMenuService menuService,
         ITransactionService transactionService
     )
         : base(triggerKey, userService)
     {
-        _menuService = menuService;
         _transactionService = transactionService;
     }
 
@@ -106,16 +101,10 @@ public class DisplayTransactionCommand : Command
         }
 
         List<Transaction>? transactions = await _transactionService.Load(dateType, dateInput);
-        if (transactions == null)
-        {
-            Utilities.WaitForKeyAny("No user detected.");
-            _menuService.SetMenu(new InitialMenu(userService, _menuService, _transactionService));
-            return;
-        }
 
         Console.WriteLine();
         Transaction.PrintHeader();
-        if (transactions.Count < 1)
+        if (transactions == null || transactions.Count < 1)
         {
             Utilities.WaitForKeyAny("No transactions found.");
             return;
