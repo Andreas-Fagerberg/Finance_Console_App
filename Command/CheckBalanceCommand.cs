@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 namespace FinanceApp_Databaser;
 
 public class CheckBalanceCommand : Command
@@ -28,8 +26,7 @@ public class CheckBalanceCommand : Command
         decimal? balance = await _transactionService.GetBalance(user);
         if (balance == null)
         {
-            Utilities.WaitForKeyAny("Current balance: 0");
-            return;
+            balance = 0;
         }
         Utilities.WaitForKeyAny("Current balance: " + balance);
     }

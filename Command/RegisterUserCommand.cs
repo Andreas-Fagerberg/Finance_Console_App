@@ -44,7 +44,7 @@ public class RegisterUserCommand : Command
                 )
             )
             {
-                continue; // Skip the current iteration and prompt the user again
+                continue;
             }
 
             if (await userService.CheckUserExists(username))

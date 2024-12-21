@@ -137,18 +137,19 @@ public class PostgresTransactionService : ITransactionService
     {
         var sql =
             @"SELECT SUM(amount) FROM transactions 
-            INNER JOIN users ON transactions.user_id = users.user_id
-            WHERE users.user_id = @user_id";
+          INNER JOIN users ON transactions.user_id = users.user_id
+          WHERE users.user_id = @user_id";
 
         using var cmd = new NpgsqlCommand(sql, connection);
         cmd.Parameters.AddWithValue("@user_id", user.UserId);
 
         using var reader = await cmd.ExecuteReaderAsync();
 
-        if (!reader.Read())
+        if (!reader.Read() || reader.IsDBNull(0))
         {
             return null;
         }
+
         decimal balance = reader.GetDecimal(0);
         return balance;
     }

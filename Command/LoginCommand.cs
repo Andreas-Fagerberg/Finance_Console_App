@@ -23,14 +23,20 @@ public class LoginCommand : Command
         {
             Console.Clear();
             Console.WriteLine("| LOGIN |\n");
-            Console.Write("Username: ");
-            string? username = Console.ReadLine();
-            Console.Write("\nPassword: ");
-            string? password = Console.ReadLine();
+            string username = InputHelper.GetUsername();
+            string password = InputHelper.GetPassword();
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (
+                !ValidationHelper.ValidateNotEmpty(
+                    username,
+                    "Username cannot be empty or whitespace."
+                )
+                || !ValidationHelper.ValidateNotEmpty(
+                    password,
+                    "Password cannot be empty or whitespace."
+                )
+            )
             {
-                Utilities.WaitForKeyAny("Username or password input cannot be empty.");
                 continue;
             }
 
