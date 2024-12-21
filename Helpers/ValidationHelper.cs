@@ -18,7 +18,7 @@ public static class ValidationHelper
     /// <param name="input"></param>
     /// <param name="errorMessage"></param>
     /// <returns>Bool</returns>
-    public static async Task<bool> ValidateNotEmpty(string? input, string errorMessage)
+    public static bool ValidateNotEmpty(string? input, string errorMessage)
     {
         if (IsNullOrEmpty(input) || IsNullOrWhiteSpace(input))
         {
