@@ -20,6 +20,7 @@ public class DisplayTransactionCommand : Command
     public override async Task Execute()
     {
         DateType dateType = DateType.NONE;
+        var dateInput = string.Empty;
 
         bool running = true;
 
@@ -53,6 +54,31 @@ public class DisplayTransactionCommand : Command
                     continue;
             }
         }
+        switch (dateType)
+    {
+        case DateType.YEAR:
+            dateInput = await InputHelper.GetYear();  // Get year input
+            break;
+        case DateType.MONTH:
+            dateInput = await InputHelper.GetMonth(); // Get month input
+            break;
+        case DateType.WEEK:
+            dateInput = await InputHelper.GetWeek();  // Get week input
+            break;
+        case DateType.DATE:
+            dateInput = await InputHelper.GetDate();  // Get date input
+            break;
+        case DateType.NONE:
+            Utilities.WaitForKeyAny("No date type selected.");
+            return;
+        default:
+            Utilities.WaitForKeyAny("Unknown date type.");
+            return;
+    }
+
+    // Output the final input (formatted date)
+    Console.WriteLine($"You selected: {dateType} with the value: {dateInput}");
+}
 
         List<Transaction>? transactions = await _transactionService.Load(dateType, date);
         if (transactions == null)

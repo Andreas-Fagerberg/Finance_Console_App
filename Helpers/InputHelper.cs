@@ -38,7 +38,7 @@ public static class InputHelper
         return password.ToString();
     }
 
-    public static int GetYear()
+    public static string GetYear()
     {
         while (true)
         {
@@ -55,11 +55,11 @@ public static class InputHelper
                 continue;
             }
 
-            return year;
+            return year.ToString();
         }
     }
 
-    public static int GetMonth()
+    public static string GetMonth()
     {
         while (true)
         {
@@ -70,11 +70,11 @@ public static class InputHelper
                 continue;
             }
 
-            return month;
+            return month.ToString();
         }
     }
 
-    public static int GetWeekNumber()
+    public static string GetWeekNumber()
     {
         while (true)
         {
@@ -87,11 +87,11 @@ public static class InputHelper
                 continue;
             }
 
-            return week;
+            return week.ToString();
         }
     }
 
-    public static DateTime GetDate()
+    public static string GetDate()
     {
         while (true)
         {
@@ -111,7 +111,7 @@ public static class InputHelper
                 );
                 continue;
             }
-            return date;
+            return date.ToString("yyyy-MM-dd");
         }
     }
 }
