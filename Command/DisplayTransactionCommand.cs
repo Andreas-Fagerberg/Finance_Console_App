@@ -30,6 +30,7 @@ public class DisplayTransactionCommand : Command
             {
                 case ConsoleKey.D1:
                     dateType = DateType.YEAR;
+
                     running = false;
                     break;
                 case ConsoleKey.D2:
