@@ -30,16 +30,17 @@ public static class SqlQueries
         WHERE user_id = @user_id 
         AND transfer_date = @date";
 
+    public static string GetTransactionsByUserId =>
+        @"
+        SELECT * FROM transactions 
+        WHERE user_id = @user_id";
+
     // Query for transactions by user ID within a date range (Start Date to End Date)
     public static string GetTransactionsByUserIdAndDateRange =>
         @"
         SELECT * FROM transactions 
         WHERE user_id = @user_id 
         AND transfer_date BETWEEN @StartDate AND @EndDate";
-    public static string GetTransactionsByUserId =>
-        @"
-        SELECT * FROM transactions 
-        WHERE user_id = @user_id";
 
     // Query for transactions by user ID and a specific day of the week
     public static string GetTransactionsByUserIdAndDayOfWeek =>

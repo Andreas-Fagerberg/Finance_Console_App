@@ -35,8 +35,16 @@ public class DeleteTransactionCommand : Command
                     continue;
             }
 
+            // Executes DisplayTransacionCommand
             await _menuService.GetMenu().ExecuteCommand(ConsoleKey.D4);
-            Console.Write("Please enter the ID of the transaction you wish to remove: ");
+
+            List<Transaction>? transactions = await _transactionService.GetCurrentTransactions();
+
+            if (transactions == null || transactions.Count <= 0)
+            {
+                continue;
+            }
+            Console.Write("\nPlease enter the ID of the transaction you wish to remove: ");
             string? id = Console.ReadLine();
             if (!ValidationHelper.ValidateNotEmpty(id, "ID cannot be empty or whitespace."))
             {
@@ -47,14 +55,6 @@ public class DeleteTransactionCommand : Command
                 Utilities.WaitForKeyAny("Please enter only numbers.");
                 continue;
             }
-
-            List<Transaction>? transactions = await _transactionService.GetCurrentTransactions();
-
-            if (transactions == null)
-            {
-                continue;
-            }
-
             foreach (Transaction transaction in transactions)
             {
                 if (transaction.RefId.Equals(parsedId))
