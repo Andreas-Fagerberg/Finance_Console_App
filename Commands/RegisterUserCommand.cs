@@ -33,7 +33,7 @@ public class RegisterUserCommand : Command
             }
 
             Console.Clear();
-            Console.WriteLine("\n                  REGISTER USER |\n");
+            Console.WriteLine("\n                  |  REGISTER USER  |\n");
 
             // Get user input
             string username = InputHelper.GetUsername();
