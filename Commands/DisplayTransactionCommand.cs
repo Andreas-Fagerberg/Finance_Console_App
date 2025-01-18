@@ -39,6 +39,6 @@ public class DisplayTransactionCommand : Command
         );
 
         // Display the results
-        await _displayHandler.DisplayTransactions(transactions, DeleteTransactionCommand.removing);
+        await _displayHandler.DisplayTransactions(transactions!, DeleteTransactionCommand.removing);
     }
 }

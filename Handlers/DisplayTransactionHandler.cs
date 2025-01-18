@@ -21,7 +21,7 @@ public class DisplayTransactionHandler
         return await ShowDateSelectionMenu();
     }
 
-    private async Task<bool> ShowInitialMenu()
+    private Task<bool> ShowInitialMenu()
     {
         var initialOptions = new List<string>
         {
@@ -38,9 +38,9 @@ public class DisplayTransactionHandler
             switch (inputKey)
             {
                 case ConsoleKey.D1:
-                    return true;
+                    return Task.FromResult(true);
                 case ConsoleKey.D2:
-                    return false;
+                    return Task.FromResult(false);
                 default:
                     continue;
             }
@@ -64,7 +64,7 @@ public class DisplayTransactionHandler
         return await ProcessDateTypeSelection(input);
     }
 
-    private async Task<DateSelectionResult> ProcessDateTypeSelection(ConsoleKey input)
+    private Task<DateSelectionResult> ProcessDateTypeSelection(ConsoleKey input)
     {
         var result = new DateSelectionResult();
 
@@ -97,15 +97,15 @@ public class DisplayTransactionHandler
                 break;
         }
 
-        return result;
+        return Task.FromResult(result);
     }
 
-    public async Task DisplayTransactions(List<Transaction> transactions, bool isRemovalMode)
+    public Task DisplayTransactions(List<Transaction> transactions, bool isRemovalMode)
     {
-        if (transactions == null || !transactions.Any())
+        if (transactions is null || !transactions.Any())
         {
             Utilities.WaitForKeyAny("No transactions found.");
-            return;
+            return Task.CompletedTask;
         }
 
         Console.WriteLine();
@@ -120,5 +120,6 @@ public class DisplayTransactionHandler
         {
             Utilities.WaitForKeyAny();
         }
+        return Task.CompletedTask;
     }
 }

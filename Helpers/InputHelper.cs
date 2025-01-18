@@ -15,11 +15,11 @@ public static class InputHelper
     {
         Console.Write("\nPassword: ");
         StringBuilder password = new StringBuilder();
+
         while (true)
         {
             var input = Console.ReadKey(true);
 
-            //
             if (input.Key == ConsoleKey.Enter)
             {
                 break;
@@ -27,8 +27,9 @@ public static class InputHelper
             else if (input.Key == ConsoleKey.Backspace && password.Length > 0)
             {
                 password.Remove(password.Length - 1, 1);
+                Console.Write("\b \b");
             }
-            else
+            else if (input.Key != ConsoleKey.Backspace)
             {
                 password.Append(input.KeyChar);
                 Console.Write("*");
