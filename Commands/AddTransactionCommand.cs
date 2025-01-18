@@ -3,6 +3,7 @@
 public class AddTransactionCommand : Command
 {
     private readonly ITransactionService _transactionService;
+    private readonly List<string> _menuContent;
 
     public AddTransactionCommand(
         ConsoleKey triggerKey,
@@ -12,6 +13,11 @@ public class AddTransactionCommand : Command
         : base(triggerKey, userService)
     {
         _transactionService = transactionService;
+        _menuContent = new List<string>
+        {
+            "Continue to add transactions.",
+            "Return to previous menu.",
+        };
     }
 
     public override async Task Execute()
@@ -25,9 +31,10 @@ public class AddTransactionCommand : Command
         Transaction transaction = new Transaction { UserId = user.UserId };
         while (true)
         {
-            SubMenu.Display(SubMenuType.ADDTRANSACTION);
-            ConsoleKey input = Console.ReadKey().Key;
-            switch (input)
+            Console.Clear();
+            SubMenu.Display("|  ADD TRANSACTION  |", _menuContent);
+            ConsoleKey inputKey = Console.ReadKey(true).Key;
+            switch (inputKey)
             {
                 case ConsoleKey.D1:
                     break;

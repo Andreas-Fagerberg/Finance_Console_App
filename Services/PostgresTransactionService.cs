@@ -116,48 +116,53 @@ public class PostgresTransactionService : ITransactionService
 
     public async Task Save(Transaction transaction)
     {
-        string sql = SqlQueries.InsertTransaction;
-
-        using var cmd = new NpgsqlCommand(sql, connection);
-        cmd.Parameters.AddWithValue("@transaction_id", transaction.TransactionId);
-        cmd.Parameters.AddWithValue("@user_id", transaction.UserId);
-        cmd.Parameters.AddWithValue("@description", transaction.Description!);
-        cmd.Parameters.AddWithValue("@amount", transaction.Amount);
-        cmd.Parameters.AddWithValue("@transfer_date", DateTime.Now);
-
+        using var dbTransaction = await connection.BeginTransactionAsync();
         try
         {
+            string sql = SqlQueries.InsertTransaction;
+
+            using var cmd = new NpgsqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@transaction_id", transaction.TransactionId);
+            cmd.Parameters.AddWithValue("@user_id", transaction.UserId);
+            cmd.Parameters.AddWithValue("@description", transaction.Description!);
+            cmd.Parameters.AddWithValue("@amount", transaction.Amount);
+            cmd.Parameters.AddWithValue("@transfer_date", DateTime.UtcNow);
+
             await cmd.ExecuteNonQueryAsync();
+            dbTransaction.Commit();
         }
-        catch
+        catch (PostgresException ex)
         {
-            Utilities.WaitForKeyAny(
-                "An error occurred while saving the transaction. Please try again later."
-            );
+            await dbTransaction.RollbackAsync();
+            Console.Clear();
+            Console.WriteLine("Failed to Save transaction due to database error");
+            Thread.Sleep(1000);
+            throw new Exception("Failed to save transaction", ex);
         }
-        return;
     }
 
-    public async Task<bool> Delete(Transaction transaction)
+    public async Task Delete(Transaction transaction)
     {
-        string sql = SqlQueries.DeleteTransactionByUuid;
-
-        using var cmd = new NpgsqlCommand(sql, connection);
-        cmd.Parameters.AddWithValue("@user_id", transaction.UserId);
-        cmd.Parameters.AddWithValue("@transaction_id", transaction.TransactionId);
-
+        using var dbTransaction = await connection.BeginTransactionAsync();
         try
         {
+            string sql = SqlQueries.DeleteTransactionByUuid;
+
+            using var cmd = new NpgsqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@user_id", transaction.UserId);
+            cmd.Parameters.AddWithValue("@transaction_id", transaction.TransactionId);
+
             await cmd.ExecuteNonQueryAsync();
+            await dbTransaction.CommitAsync();
         }
-        catch
+        catch (PostgresException ex)
         {
-            Utilities.WaitForKeyAny(
-                "An error occurred while deleting the transaction. Please try again later."
-            );
-            return false;
+            await dbTransaction.RollbackAsync();
+            Console.Clear();
+            Console.WriteLine("Failed to Delete transaction due to database error");
+            Thread.Sleep(1000);
+            throw new Exception("Failed to delete transaction", ex);
         }
-        return true;
     }
 
     public async Task<decimal?> GetBalance(User user)

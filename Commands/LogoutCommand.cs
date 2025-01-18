@@ -4,6 +4,7 @@ public class LogoutCommand : Command
 {
     private readonly IMenuService _menuService;
     private readonly ITransactionService _transactionService;
+    private readonly List<string> _menuContent;
 
     public LogoutCommand(
         ConsoleKey triggerKey,
@@ -15,15 +16,17 @@ public class LogoutCommand : Command
     {
         _menuService = menuService;
         _transactionService = transactionService;
+        _menuContent = new List<string> { "Log out current user.", "Return to previous menu" };
     }
 
     public override Task Execute()
     {
         while (true)
         {
-            SubMenu.Display(SubMenuType.LOGOUT);
-            ConsoleKeyInfo input = Console.ReadKey();
-            switch (input.Key)
+            Console.Clear();
+            SubMenu.Display("|  LOG OUT  |", _menuContent);
+            ConsoleKey inputKey = Console.ReadKey(true).Key;
+            switch (inputKey)
             {
                 case ConsoleKey.D1:
                     _menuService.SetMenu(

@@ -4,6 +4,7 @@ public class DeleteTransactionCommand : Command
 {
     private readonly ITransactionService _transactionService;
     private readonly IMenuService _menuService;
+    private readonly List<string> _menuContent;
     public static bool removing = false;
 
     public DeleteTransactionCommand(
@@ -16,14 +17,20 @@ public class DeleteTransactionCommand : Command
     {
         _menuService = menuService;
         _transactionService = transactionService;
+        _menuContent = new List<string>
+        {
+            "Continue to remove transactions.",
+            "Return to previous menu.",
+        };
     }
 
     public override async Task Execute()
     {
         while (true)
         {
-            SubMenu.Display(SubMenuType.DELETETRANSACTION);
-            ConsoleKey inputKey = Console.ReadKey().Key;
+            Console.Clear();
+            SubMenu.Display("|  TRANSACTION DISPLAY  |", _menuContent);
+            ConsoleKey inputKey = Console.ReadKey(true).Key;
             switch (inputKey)
             {
                 case ConsoleKey.D1:
@@ -59,16 +66,11 @@ public class DeleteTransactionCommand : Command
             {
                 if (transaction.RefId.Equals(parsedId))
                 {
-                    if (!await _transactionService.Delete(transaction))
-                    {
-                        Utilities.WaitForKeyAny("Failed to delete the transaction.");
-                        return;
-                    }
+                    await _transactionService.Delete(transaction);
+
                     Utilities.WaitForKeyAny("Successfully deleted the transaction.");
                 }
             }
-
-            Utilities.WaitForKeyAny("Hello!");
             break;
         }
         removing = false;

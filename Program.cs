@@ -17,7 +17,7 @@ class Program
         {
             Console.Clear();
             menuService.GetMenu().Display();
-            ConsoleKey inputCommand = Console.ReadKey().Key;
+            ConsoleKey inputCommand = Console.ReadKey(true).Key;
 
             if (inputCommand.Equals(ConsoleKey.Escape))
             {

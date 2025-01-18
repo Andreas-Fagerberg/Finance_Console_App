@@ -22,14 +22,14 @@ public class Transaction
             transactionString =
                 "  "
                 + RefId
-                + new string((char)32, 4 - RefId.ToString().Length)
+                + new string(' ', 4 - RefId.ToString().Length)
                 + "|  "
                 + Description
-                + new string((char)32, 35 - Description.Length)
+                + new string(' ', 35 - Description.Length)
                 + "|  "
                 + Amount
-                + new string((char)32, 20 - Amount.ToString().Length)
-                + "|  "
+                + new string(' ', 16 - Amount.ToString().Length)
+                + " kr |  "
                 + Date.ToString("yyyy-MM-dd HH:mm");
         }
         return transactionString;

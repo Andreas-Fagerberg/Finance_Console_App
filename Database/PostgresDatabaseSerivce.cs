@@ -23,8 +23,8 @@ public class PostgresDatabaseService : DatabaseService<NpgsqlConnection>
                 @"
                 CREATE TABLE IF NOT EXISTS users (
                     user_id UUID PRIMARY KEY,
-                    name TEXT,
-                    password TEXT
+                    name TEXT NOT NULL,
+                    password VARCHAR(60) NOT NULL
                 );
        
                 CREATE TABLE IF NOT EXISTS transactions (

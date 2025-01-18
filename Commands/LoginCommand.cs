@@ -22,10 +22,13 @@ public class LoginCommand : Command
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("| LOGIN |\n");
+            Console.WriteLine("\n                  |  LOGIN  |\n");
+
+            // Get credentials from user
             string username = InputHelper.GetUsername();
             string password = InputHelper.GetPassword();
 
+            // Validate input
             if (
                 !ValidationHelper.ValidateNotEmpty(
                     username,
@@ -37,13 +40,16 @@ public class LoginCommand : Command
                 )
             )
             {
-                continue;
+                return;
             }
 
+            // The userService will now handle password verification internally
             User? user = await userService.Login(username, password);
+
             if (user is null)
             {
-                Utilities.WaitForKeyAny("No user found with those credentials.");
+                // Use a generic error message for security
+                Utilities.WaitForKeyAny("Invalid username or password.");
                 continue;
             }
 
