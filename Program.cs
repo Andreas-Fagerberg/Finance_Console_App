@@ -1,28 +1,41 @@
-﻿using Npgsql;
-
-namespace FinanceApp_Databaser;
+﻿namespace FinanceApp_Databaser;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        DatabaseService<NpgsqlConnection> postgresDatabaseService = new PostgresDatabaseService();
-
-        NpgsqlConnection connection = await postgresDatabaseService.SetupDatabase();
-
+        var databaseService = new PostgresDatabaseService();
+        using var connection = await databaseService.SetupDatabase();
         DependencyContainer container = new DependencyContainer(connection);
+
+        var startup = new ApplicationStartup(container);
+        startup.Initialize();
 
         IMenuService menuService = container.MenuService;
 
-        Menu startMenu = new LoginMenu(container);
-        menuService.SetMenu(startMenu);
-
         while (true)
         {
-            Utilities.WaitForKeyAny();
-            ConsoleKey inputCommand = Console.ReadKey().Key;
+            Console.Clear();
+            menuService.GetMenu().Display();
+            ConsoleKey inputCommand = Console.ReadKey(true).Key;
 
-            menuService.GetMenu().ExecuteCommand(inputCommand);
+            if (inputCommand.Equals(ConsoleKey.Escape))
+            {
+                Utilities.WaitForKeyAny("Thank you for using our finance app!");
+                break;
+            }
+
+            try
+            {
+                await menuService.GetMenu().ExecuteCommand(inputCommand);
+            }
+            catch (Exception ex)
+            {
+                string message = string.IsNullOrEmpty(ex.Message)
+                    ? "Something went wrong, please try again."
+                    : ex.Message;
+                Utilities.WaitForKeyAny(message);
+            }
         }
     }
 }
